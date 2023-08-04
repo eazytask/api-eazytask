@@ -1,0 +1,11 @@
+
+Unschedueled roster = #5DADE2 info
+
+Rejected roster = #F8C471 yello
+past missed roster = #F8C471 yello
+
+past worked roster = #7367f0 purple
+
+upcoming roster = #82E0AA green
+
+unconfirmed roster = #F93737 red

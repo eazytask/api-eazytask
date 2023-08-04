@@ -1,0 +1,35 @@
+[17-Nov-2022 17:46:43 Australia/Sydney] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /home/eklaw543/api.eazytask.au/vendor/laravel/framework/src/Illuminate/Database/Grammar.php on line 159
+[17-Nov-2022 17:48:02 Australia/Sydney] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /home/eklaw543/api.eazytask.au/vendor/laravel/framework/src/Illuminate/Database/Grammar.php on line 159
+[15-Jan-2023 05:32:04 UTC] PHP Warning:  require(/home/eklaw543/api.eazytask.au/vendor/composer/../../app/Helpers/Functions.php): Failed to open stream: No such file or directory in /home/eklaw543/api.eazytask.au/vendor/composer/autoload_real.php on line 71
+[15-Jan-2023 05:32:04 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/eklaw543/api.eazytask.au/vendor/composer/../../app/Helpers/Functions.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/eklaw543/api.eazytask.au/vendor/composer/autoload_real.php:71
+Stack trace:
+#0 /home/eklaw543/api.eazytask.au/vendor/composer/autoload_real.php(61): composerRequire6dbdbc584a397b009e3858136265d701()
+#1 /home/eklaw543/api.eazytask.au/vendor/autoload.php(7): ComposerAutoloaderInit6dbdbc584a397b009e3858136265d701::getLoader()
+#2 /home/eklaw543/api.eazytask.au/public/index.php(34): require('/home/eklaw543/...')
+#3 {main}
+  thrown in /home/eklaw543/api.eazytask.au/vendor/composer/autoload_real.php on line 71
+[15-Jan-2023 05:32:08 UTC] PHP Warning:  require(/home/eklaw543/api.eazytask.au/vendor/composer/../../app/Helpers/Functions.php): Failed to open stream: No such file or directory in /home/eklaw543/api.eazytask.au/vendor/composer/autoload_real.php on line 71
+[15-Jan-2023 05:32:08 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/eklaw543/api.eazytask.au/vendor/composer/../../app/Helpers/Functions.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/eklaw543/api.eazytask.au/vendor/composer/autoload_real.php:71
+Stack trace:
+#0 /home/eklaw543/api.eazytask.au/vendor/composer/autoload_real.php(61): composerRequire6dbdbc584a397b009e3858136265d701()
+#1 /home/eklaw543/api.eazytask.au/vendor/autoload.php(7): ComposerAutoloaderInit6dbdbc584a397b009e3858136265d701::getLoader()
+#2 /home/eklaw543/api.eazytask.au/public/index.php(34): require('/home/eklaw543/...')
+#3 {main}
+  thrown in /home/eklaw543/api.eazytask.au/vendor/composer/autoload_real.php on line 71
+[15-Jan-2023 05:32:08 UTC] PHP Warning:  require(/home/eklaw543/api.eazytask.au/vendor/composer/../../app/Helpers/Functions.php): Failed to open stream: No such file or directory in /home/eklaw543/api.eazytask.au/vendor/composer/autoload_real.php on line 71
+[15-Jan-2023 05:32:08 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/eklaw543/api.eazytask.au/vendor/composer/../../app/Helpers/Functions.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/eklaw543/api.eazytask.au/vendor/composer/autoload_real.php:71
+Stack trace:
+#0 /home/eklaw543/api.eazytask.au/vendor/composer/autoload_real.php(61): composerRequire6dbdbc584a397b009e3858136265d701()
+#1 /home/eklaw543/api.eazytask.au/vendor/autoload.php(7): ComposerAutoloaderInit6dbdbc584a397b009e3858136265d701::getLoader()
+#2 /home/eklaw543/api.eazytask.au/public/index.php(34): require('/home/eklaw543/...')
+#3 {main}
+  thrown in /home/eklaw543/api.eazytask.au/vendor/composer/autoload_real.php on line 71
+[15-Jan-2023 05:32:08 UTC] PHP Warning:  require(/home/eklaw543/api.eazytask.au/vendor/composer/../../app/Helpers/Functions.php): Failed to open stream: No such file or directory in /home/eklaw543/api.eazytask.au/vendor/composer/autoload_real.php on line 71
+[15-Jan-2023 05:32:08 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/eklaw543/api.eazytask.au/vendor/composer/../../app/Helpers/Functions.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/eklaw543/api.eazytask.au/vendor/composer/autoload_real.php:71
+Stack trace:
+#0 /home/eklaw543/api.eazytask.au/vendor/composer/autoload_real.php(61): composerRequire6dbdbc584a397b009e3858136265d701()
+#1 /home/eklaw543/api.eazytask.au/vendor/autoload.php(7): ComposerAutoloaderInit6dbdbc584a397b009e3858136265d701::getLoader()
+#2 /home/eklaw543/api.eazytask.au/public/index.php(34): require('/home/eklaw543/...')
+#3 {main}
+  thrown in /home/eklaw543/api.eazytask.au/vendor/composer/autoload_real.php on line 71
+[17-Jan-2023 23:32:15 Australia/Sydney] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/eklaw543/api.eazytask.au/app/Http/Resources/user/UserRoleResource.php on line 4
