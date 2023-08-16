@@ -67,7 +67,7 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
             'modes' => [
-                 //'ONLY_FULL_GROUP_BY', // Disable this to allow grouping by one column
+                 'ONLY_FULL_GROUP_BY', // Disable this to allow grouping by one column
                  'STRICT_TRANS_TABLES',
                  'NO_ZERO_IN_DATE',
                  'NO_ZERO_DATE',
