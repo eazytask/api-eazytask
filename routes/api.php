@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\MessagesController;
 use App\Http\Controllers\admin\ActivityLogController;
 use App\Http\Controllers\admin\ClientController;
 use App\Http\Controllers\admin\EmployeeController;
@@ -84,6 +85,16 @@ Route::prefix('v1')->group(function () {
         Route::get('/employees/{status?}', [BasicController::class, 'employees']);
         Route::get('/compliances', [BasicController::class, 'compliances']);
 
+        Route::get('messages', [MessagesController::class, 'index']);
+        Route::post('messages', [MessagesController::class, 'store'])->middleware('is_admin');
+        Route::post('messages/reply', [MessagesController::class, 'storeReply']);
+        Route::post('messages/confirm', [MessagesController::class, 'confirm']);
+        Route::post('messages/unconfirm', [MessagesController::class, 'unconfirm']);
+        Route::post('messages/update', [MessagesController::class, 'update']);
+        Route::post('messages/destroy', [MessagesController::class, 'destroy']);
+        Route::post('messages/update-reply', [MessagesController::class, 'updateReply']);
+        Route::post('messages/destroy-reply', [MessagesController::class, 'destroyReply']);
+        
         # all admin routes
         Route::prefix('admin')->group(function () {
             Route::middleware(['is_admin'])->group(function () {
