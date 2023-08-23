@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\admin\ScheduledCalendarResource;
+use App\Http\Resources\admin\AdminRosterResource;
 use App\Http\Resources\admin\EmployeeResource;
 use App\Http\Resources\user\UserProjectResource;
 use App\Mail\NotifyUser;
@@ -162,132 +163,149 @@ class ScheduledCalendarController extends Controller
 
         return send_response(true, '', EmployeeResource::collection($employees));
     }
+    
+    public function roaster_status(){
+        return $this->belongsTo('App\Models\RoasterStatus','roaster_status_id');
+    }
 
-    // public function index(Request $request)
-    // {
-    //     $week = Carbon::parse($request->week);
-    //     $filter_project = $request->project ? ['project_id', $request->project] : ['employee_id', '>', 0];
-    //     $filter_roster_status = $request->roster_status ? ['roaster_status_id', $request->roster_status] : ['employee_id', '>', 0];
-    //     // $filter_roster_type = $request->roster_type? ['roaster_type', $request->roster_type] : ['employee_id', '>', 0];
+    public function get_roster_enrty(Request $request)
+    {
+        $week = Carbon::parse($request->week);
+        $filter_project = $request->project ? ['project_id', $request->project] : ['employee_id', '>', 0];
+        $filter_roster_status = $request->roster_status ? ['roaster_status_id', $request->roster_status] : ['employee_id', '>', 0];
+        // $filter_roster_type = $request->roster_type? ['roaster_type', $request->roster_type] : ['employee_id', '>', 0];
 
-    //     $start_date = Carbon::parse($week)->startOfWeek();
-    //     $end_date = Carbon::parse($week)->endOfWeek();
+        $start_date = Carbon::parse($week)->startOfWeek();
+        $end_date = Carbon::parse($week)->endOfWeek();
+        
+        $projects = Project::whereHas('client', function ($query) {
+            $query->where('status', 1);
+        })->where([
+            ['company_code', Auth::user()->company_roles->first()->company->id],
+            ['Status', '1'],
+        ])->orderBy('pName', 'asc')->get();
 
-    //     $employees = DB::table('time_keepers')
-    //         ->select(DB::raw(
-    //             'e.*,
-    //             sum(time_keepers.duration) as total_hours,
-    //             sum(time_keepers.amount) as total_amount'
-    //         ))
-    //         ->leftJoin('employees as e', 'e.id', 'time_keepers.employee_id')
-    //         ->where([
-    //             ['e.company', Auth::user()->company_roles->first()->company->id],
-    //             ['e.role', 3],
-    //             $filter_project,
-    //             $filter_roster_status,
-    //             // $filter_roster_type,
-    //             ['roaster_type', 'Schedueled']
-    //         ])
-    //         ->groupBy("e.id")
-    //         ->orderBy('e.fname')
-    //         ->whereBetween('roaster_date', [$start_date, $end_date])
-    //         ->get();
+        $employees = DB::table('time_keepers')
+            ->select(DB::raw(
+                'e.*,
+                sum(time_keepers.duration) as total_hours,
+                sum(time_keepers.amount) as total_amount'
+            ))
+            ->leftJoin('employees as e', 'e.id', 'time_keepers.employee_id')
+            ->where([
+                ['e.company', Auth::user()->company_roles->first()->company->id],
+                ['e.role', 3],
+                $filter_project,
+                $filter_roster_status,
+                // $filter_roster_type,
+                ['roaster_type', 'Schedueled']
+            ])
+            ->groupBy("e.id")
+            ->orderBy('e.fname')
+            ->whereBetween('roaster_date', [$start_date, $end_date])
+            ->get();
 
-    //     $data = [];
-    //     if ($employees->count() > 0) {
-    //         foreach ($employees as $key => $employee) {
-    //             $mon_ = [];
-    //             $tue_ = [];
-    //             $wed_ = [];
-    //             $thu_ = [];
-    //             $fri_ = [];
-    //             $sat_ = [];
-    //             $sun_ = [];
+        $data = [];
+        if ($employees->count() > 0) {
+            foreach ($employees as $key => $employee) {
+                $mon_ = [];
+                $tue_ = [];
+                $wed_ = [];
+                $thu_ = [];
+                $fri_ = [];
+                $sat_ = [];
+                $sun_ = [];
 
-    //             $timekeepers = TimeKeeper::where([
-    //                 ['employee_id', $employee->id],
-    //                 ['company_code', Auth::user()->company_roles->first()->company->id],
-    //                 ['roaster_type', 'Schedueled'],
-    //                 // $filter_roster_type,
-    //                 $filter_roster_status,
-    //                 $filter_project
-    //             ])->whereBetween('roaster_date', [$start_date, $end_date])
-    //                 ->get();
+                $timekeepers = TimeKeeper::where([
+                    ['employee_id', $employee->id],
+                    ['company_code', Auth::user()->company_roles->first()->company->id],
+                    // ['roaster_type', 'Schedueled'],
+                    // $filter_roster_type,
+                    $filter_roster_status,
+                    $filter_project
+                ])->whereBetween('roaster_date', [$start_date, $end_date])
+                ->with(['roaster_status'])
+                    ->get();
+                    
+            
+    
 
-    //             foreach (ScheduledCalendarResource::collection($timekeepers) as $timekeeper) {
-    //                 $roaster_day = Carbon::parse($timekeeper->roaster_date)->format('D');
+                foreach (AdminRosterResource::collection($timekeepers) as $timekeeper) {
+                    $roaster_day = Carbon::parse($timekeeper->roaster_date)->format('D');
 
-    //                 if ($roaster_day == 'Mon') {
-    //                     array_push($mon_, $timekeeper);
-    //                 } elseif ($roaster_day == 'Tue') {
-    //                     array_push($tue_, $timekeeper);
-    //                 } elseif ($roaster_day == 'Wed') {
-    //                     array_push($wed_, $timekeeper);
-    //                 } elseif ($roaster_day == 'Thu') {
-    //                     array_push($thu_, $timekeeper);
-    //                 } elseif ($roaster_day == 'Fri') {
-    //                     array_push($fri_, $timekeeper);
-    //                 } elseif ($roaster_day == 'Sat') {
-    //                     array_push($sat_, $timekeeper);
-    //                 } elseif ($roaster_day == 'Sun') {
-    //                     array_push($sun_, $timekeeper);
-    //                 }
-    //             }
+                    if ($roaster_day == 'Mon') {
+                        array_push($mon_, $timekeeper);
+                    } elseif ($roaster_day == 'Tue') {
+                        array_push($tue_, $timekeeper);
+                    } elseif ($roaster_day == 'Wed') {
+                        array_push($wed_, $timekeeper);
+                    } elseif ($roaster_day == 'Thu') {
+                        array_push($thu_, $timekeeper);
+                    } elseif ($roaster_day == 'Fri') {
+                        array_push($fri_, $timekeeper);
+                    } elseif ($roaster_day == 'Sat') {
+                        array_push($sat_, $timekeeper);
+                    } elseif ($roaster_day == 'Sun') {
+                        array_push($sun_, $timekeeper);
+                    }
+                }
 
-    //             array_push($data, [
-    //                 'employee' => $employee->fname . ' ' . $employee->mname . ' ' . $employee->lname,
-    //                 'image' => $employee->image ? asset($employee->image) : "",
-    //                 'total_hours' => $employee->total_hours,
-    //                 'weeks' => [
-    //                     [
-    //                         "day" => "Monday",
-    //                         "shifts" => $mon_
-    //                     ],
-    //                     [
-    //                         "day" => "Tuesday",
-    //                         "shifts" => $tue_
-    //                     ],
-    //                     [
-    //                         "day" => "Wednesday",
-    //                         "shifts" => $wed_
-    //                     ],
-    //                     [
-    //                         "day" => "Thursday",
-    //                         "shifts" => $thu_
-    //                     ],
-    //                     [
-    //                         "day" => "Friday",
-    //                         "shifts" => $fri_
-    //                     ],
-    //                     [
-    //                         "day" => "Saturday",
-    //                         "shifts" => $sat_
-    //                     ],
-    //                     [
-    //                         "day" => "Sunday ",
-    //                         "shifts" => $sun_
-    //                     ],
-    //                 ],
-    //             ]);
-    //         }
+                array_push($data, [
+                    'employee' => $employee->fname . ' ' . $employee->mname . ' ' . $employee->lname,
+                    'image' => $employee->image ? asset($employee->image) : "",
+                    'total_hours' => $employee->total_hours,
+                    'weeks' => [
+                        [
+                            "day" => "Monday",
+                            "shifts" => $mon_
+                        ],
+                        [
+                            "day" => "Tuesday",
+                            "shifts" => $tue_
+                        ],
+                        [
+                            "day" => "Wednesday",
+                            "shifts" => $wed_
+                        ],
+                        [
+                            "day" => "Thursday",
+                            "shifts" => $thu_
+                        ],
+                        [
+                            "day" => "Friday",
+                            "shifts" => $fri_
+                        ],
+                        [
+                            "day" => "Saturday",
+                            "shifts" => $sat_
+                        ],
+                        [
+                            "day" => "Sunday ",
+                            "shifts" => $sun_
+                        ],
+                    ],
+                ]);
+            }
 
-    //         // $project  = $employees ? $timekeeper->project->pName: '';
+            // $project  = $employees ? $timekeeper->project->pName: '';
 
-    //         return send_response(true, '', [
-    //             'week' => $start_date->format('d M, Y') . ' -  ' . $end_date->format('d M, Y'),
-    //             'total_hours' => (float) $employees->sum('total_hours'),
-    //             'total_amount' => round($employees->sum('total_amount'), 2),
-    //             'data' => $data,
-    //         ]);
-    //     }
+            return send_response(true, '', [
+                'week' => $start_date->format('d M, Y') . ' -  ' . $end_date->format('d M, Y'),
+                'total_hours' => (string) $employees->sum('total_hours'),
+                'total_amount' => (string) round($employees->sum('total_amount'), 2),
+                'projects' => $projects,
+                'data' => $data,
+            ]);
+        }
 
-    //     return send_response(true, '', [
-    //         'week' => $start_date->format('d M, Y') . ' -  ' . $end_date->format('d M, Y'),
-    //         'total_hours' => 0,
-    //         'total_amount' => 0,
-    //         'data' => [],
-    //     ]);
-    // }
+        return send_response(true, '', [
+            'week' => $start_date->format('d M, Y') . ' -  ' . $end_date->format('d M, Y'),
+            'total_hours' => (string) 0,
+            'total_amount' => (string) 0,
+            'projects' => $projects,
+            'data' => [],
+        ]);
+    }
     
         public function get_projects($week)
     {
@@ -698,6 +716,7 @@ class ScheduledCalendarController extends Controller
                 ['shift_end', '<=', Carbon::now()],
                 $filter_project
             ])
+            ->whereNotNull('sing_in')
             ->where(function ($q) {
                 $q->where('roaster_type', 'Schedueled');
                 $q->where('roaster_status_id', roaster_status('Accepted'));

@@ -110,6 +110,7 @@ class ViewScheduleController extends Controller
             'app_duration' => 'required',
             'app_rate' => 'required',
             'app_amount' => 'required',
+            'is_approved' => 'required',
         ]);
 
         if ($validator->fails())
@@ -117,8 +118,9 @@ class ViewScheduleController extends Controller
 
         try {
             $timekeeper = TimeKeeper::find($request->timekeeper_id);
+        
 
-            if ($timekeeper) {
+            if (isset($timekeeper)) {
                 if ($timekeeper->shift_end <= Carbon::now() && $timekeeper->is_approved == 0) {
                     $shift_start = Carbon::parse($timekeeper->roaster_date . $request->app_start);
                     $shift_end = Carbon::parse($shift_start)->addMinute($request->app_duration * 60);
@@ -128,13 +130,20 @@ class ViewScheduleController extends Controller
                     $timekeeper->app_duration = $request->app_duration;
                     $timekeeper->app_rate = $request->app_rate;
                     $timekeeper->app_amount = $request->app_amount;
-                    if($request->is_approved){
+                    if(isset($request->sing_in)){
+                        $timekeeper->sing_in = Carbon::parse($request->sing_in);
+                    }
+                    if(isset($request->sing_out)){
+                        $timekeeper->sing_out = Carbon::parse($request->sing_out);
+                    }
+                    if($request->is_approved == 1){
                         $timekeeper->is_approved = 1;
                     }
                     $timekeeper->save();
+                    return send_response(true, 'roster updated successfully', new TimekeeperResource($timekeeper));
                 }
             }
-            return send_response(true, 'roster updated successfully', new TimekeeperResource($timekeeper));
+            return send_response(false, 'roster updated successfully', new TimekeeperResource($timekeeper));
         } catch (\Throwable $e) {
             return send_response(false, $e->getMessage(), [], 400);
         }

@@ -40,6 +40,7 @@ class ScheduledCalendarResource extends JsonResource
             'app_start' => $this->Approved_start_datetime,
             'app_end' => $this->Approved_end_datetime,
             'app_duration' => $this->app_duration,
+            'is_applied' => $this->apply_status(),
             'app_rate' => $this->app_rate,
             'app_amount' => $this->app_amount,
             'remarks' => $this->remarks,
@@ -80,5 +81,17 @@ class ScheduledCalendarResource extends JsonResource
             $status = '#FFC69E';
         }
         return $status;
+    }
+    
+    protected function apply_status(){
+        if ($this->roaster_type == 'Unschedueled') {
+            return 1;
+        }elseif ($this->roaster_status_id == roaster_status('Rejected')) {
+            return 3;
+        } elseif ($this->roaster_status_id == roaster_status('Accepted')) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }

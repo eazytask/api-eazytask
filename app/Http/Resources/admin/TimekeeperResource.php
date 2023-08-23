@@ -19,7 +19,7 @@ class TimekeeperResource extends JsonResource
         // return parent::toArray($request);
         return [
             'id' => $this->id,
-            'employee_id' => $this->employee_id,
+            'employee_id' => (int) $this->employee_id,
             'employee' => new EmployeeResource($this->employee),
             'project' =>new UserProjectResource($this->project),
             'roaster_date' => $this->roaster_date,

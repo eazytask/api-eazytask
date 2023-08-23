@@ -17,7 +17,7 @@ class UserActivityPhotoController extends Controller
             $image_type_aux = explode("image/", $image_parts[0]);
             $image_type = $image_type_aux[1];
             $image_base64 = base64_decode($image_parts[1]);
-            $fileName = $timekeeper_id . '_sign_in_' . Carbon::now()->format('sihdmy') . '.' . $image_type;
+            $fileName = $timekeeper_id . '_'.$sign.'_'. Carbon::now()->format('sihdmy') . '.' . $image_type;
             // $fileName = $timekeeper_id . '_sign_in_' . Carbon::now()->format('sihdmy') . '.jpeg'; 
 
             $image_url = $folderPath . $fileName;

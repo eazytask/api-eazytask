@@ -29,8 +29,8 @@ class ProjectController extends Controller
             'suburb' => 'required',
             'project_state' => 'required',
             'postal_code' => 'required',
-            'lat' => 'required',
-            'lon' => 'required',
+            // 'lat' => 'required',
+            // 'lon' => 'required',
         ]);
         if ($validator->fails())
             return send_response(false, 'validation error!', $validator->errors(),400);
@@ -47,8 +47,13 @@ class ProjectController extends Controller
             // $project->project_venue = $request->project_venue;
             $project->postal_code = $request->postal_code;
             $project->project_state = $request->project_state;
-            $project->lat = $request->lat;
-            $project->lon = $request->lon;
+            if(isset($request->lat)){
+                $project->lat = $request->lat;
+            }
+            if(isset($request->lon)){
+                $project->lon = $request->lon;
+            }
+            
             $project->company_code = Auth::user()->company_roles->first()->company->id;
             $project->clientName = $request->clientName;
 

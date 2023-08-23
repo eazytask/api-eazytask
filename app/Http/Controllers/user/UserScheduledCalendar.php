@@ -28,8 +28,8 @@ class UserScheduledCalendar extends Controller
             ->whereBetween('roaster_date', [$week->startOfWeek()->toDateString(), $week->endOfWeek()->toDateString()])
             ->where([
                 ['employee_id', Auth::user()->employee->id],
-                ['roaster_status_id', roaster_status('Accepted')],
-                ['roaster_type', 'Schedueled']
+                // ['roaster_status_id', roaster_status('Accepted')],
+                // ['roaster_type', 'Schedueled']
             ])
             ->where(function ($q) {
                 avoid_rejected_key($q);

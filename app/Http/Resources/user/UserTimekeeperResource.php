@@ -56,7 +56,7 @@ class UserTimekeeperResource extends JsonResource
         if ($this->roaster_type == 'Unschedueled') {
             return 1;
         }elseif ($this->roaster_status_id == roaster_status('Rejected')) {
-            return 1;
+            return 3;
         } elseif ($this->roaster_status_id == roaster_status('Accepted')) {
             return 1;
         } else {

@@ -149,6 +149,8 @@ class TimekeeperController extends Controller
             'ratePerHour' => 'required',
             'amount' => 'required',
         ]);
+        
+        $errors = [];
 
         if ($validator->fails())
             return send_response(false, 'validation error!', $validator->errors(), 400);
