@@ -9,5 +9,9 @@ class JobType extends Model
 {
     use HasFactory;
     protected $table = "job_types";
-   protected $fillable = ['name', 'user_id', 'company_code', 'remarks'];
+    protected $fillable = ['name', 'user_id', 'company_code', 'remarks'];
+
+    protected $casts = [
+        'user_id' => 'string',
+    ];
 }
