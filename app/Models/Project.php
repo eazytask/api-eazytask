@@ -13,6 +13,16 @@ class Project extends Model
     use HasFactory, LogsActivity;
     protected $table = "projects";
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'user_id' => 'string',
+        'clientName' => 'string',
+    ];
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
