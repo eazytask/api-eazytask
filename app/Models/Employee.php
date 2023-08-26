@@ -13,10 +13,6 @@ class Employee extends Model
   use HasFactory, LogsActivity;
   protected $guarded = [];
 
-  protected $casts = [
-    'role' => 'string',
-    'status' => 'string',
-  ];
   /**
    * Get the user's image.
    *
