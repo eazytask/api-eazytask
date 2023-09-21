@@ -87,10 +87,10 @@ Route::prefix('v1')->group(function () {
 
         Route::get('messages', [MessagesController::class, 'index']);
         Route::post('messages', [MessagesController::class, 'store'])->middleware('is_admin');
+        Route::put('messages', [MessagesController::class, 'update']);
         Route::post('messages/reply', [MessagesController::class, 'storeReply']);
         Route::post('messages/confirm', [MessagesController::class, 'confirm']);
         Route::post('messages/unconfirm', [MessagesController::class, 'unconfirm']);
-        Route::post('messages/update', [MessagesController::class, 'update']);
         Route::post('messages/destroy', [MessagesController::class, 'destroy']);
         Route::post('messages/update-reply', [MessagesController::class, 'updateReply']);
         Route::post('messages/destroy-reply', [MessagesController::class, 'destroyReply']);

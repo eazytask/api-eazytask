@@ -34,7 +34,7 @@ class MessagesController extends Controller
                 }
             }
 
-            return send_response(true, '', ['messages' => $messages, 'projects' => $projects]);
+            return send_response(true, 'Succesfully Fetch Messages', $messages);
         } catch (\Throwable $e) {
             return send_response(false, 'something went wrong!', 400);
         }
