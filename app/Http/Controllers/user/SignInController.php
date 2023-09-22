@@ -69,7 +69,7 @@ class SignInController extends Controller
         try {
             $roster = TimeKeeper::find($request->timekeeper_id);
             $roster->sing_in = Carbon::now();
-            $roster->signin_comment = $request->comment;
+            $roster->signin_comment = $request->comment ?? null;
             $roster->save();
 
             if ($request->lat && $request->lon) {

@@ -138,7 +138,7 @@ class ProfileController extends Controller
                 $row->save();
             }
 
-            return send_response(true, 'profile updated successfully.', $admin);
+            return send_response(true, 'profile updated successfully.');
         } catch (\Throwable $e) {
             return $e->getMessage();
         }

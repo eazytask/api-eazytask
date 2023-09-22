@@ -118,6 +118,7 @@ Route::prefix('v1')->group(function () {
                 #scheduled calendar
                 Route::get('sign/in/status/data', [ScheduledCalendarController::class, 'sign_in_status']);
                 Route::get('roster/approve', [ScheduledCalendarController::class, 'approve_week']);
+                Route::get('roster/calendar/data', [ScheduledCalendarController::class, 'get_roster_enrty']);
 
                 Route::get('scheduled/calendar/data', [ScheduledCalendarController::class, 'index']);
                 Route::get('scheduled/calendar/filter/employee', [ScheduledCalendarController::class, 'filter_emoployee']);
