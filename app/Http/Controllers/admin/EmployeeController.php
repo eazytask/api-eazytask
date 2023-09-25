@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Validator;
 use Image;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserCredential as MailUserCredential;
+use App\Mail\TestEmail;
 
 class EmployeeController extends Controller
 {
@@ -90,7 +91,8 @@ class EmployeeController extends Controller
                 $user->save();
                 $GLOBALS['data'] = $user;
                 try {
-                    $mail = Mail::to($GLOBALS['data']->email)->send(new MailUserCredential($email_data));
+                    Mail::to($GLOBALS['data']->email)->send(new TestEmail());
+                    // $mail = Mail::to($GLOBALS['data']->email)->send(new MailUserCredential($email_data));
                     
                     // $mail = $GLOBALS['data']->notify(new UserCredential($email_data));
                 } catch (\Exception $e) {
