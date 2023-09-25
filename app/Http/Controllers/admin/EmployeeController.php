@@ -18,6 +18,7 @@ use Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Image;
+use App\Mail\TestEmail;
 
 class EmployeeController extends Controller
 {
@@ -88,7 +89,7 @@ class EmployeeController extends Controller
                 $user->save();
                 $GLOBALS['data'] = $user;
                 try {
-                    $mail = $GLOBALS['data']->notify(new UserCredential($email_data));
+                    $mail = $GLOBALS['data']->notify(new TestEmail());
                 } catch (\Exception $e) {
                     // $GLOBALS['data']->delete();
                     send_response(false, 'validation error!', ['email' => "this email is incorrect."], 400);
