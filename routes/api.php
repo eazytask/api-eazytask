@@ -33,6 +33,9 @@ use App\Http\Controllers\user\UserShiftController;
 use App\Http\Controllers\user\UserSummeryController;
 use App\Http\Controllers\user\UserUnavailabilityCntroller;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use App\Mail\TestEmail;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +51,22 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+
+Route::get('/test-email-for-development', function () {
+    // Replace 'youremail@example.com' with your recipient's email address
+    $recipientEmail = 'mawanher07@gmail.com';
+
+    // Send a test email
+    try {
+        Mail::to($recipientEmail)->send(new TestEmail());
+        Log::info('Test email sent successfully.');
+    } catch (\Exception $e) {
+        Log::error('Failed to send test email: ' . $e->getMessage());
+        return "Failed to send test email: " . $e->getMessage();
+    }
+
+    return "Test email sent successfully!";
+});
 
 Route::prefix('v1')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
