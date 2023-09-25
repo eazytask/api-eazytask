@@ -90,7 +90,7 @@ class EmployeeController extends Controller
                 try {
                     $mail = $GLOBALS['data']->notify(new UserCredential($email_data));
                 } catch (\Exception $e) {
-                    $GLOBALS['data']->delete();
+                    // $GLOBALS['data']->delete();
                     send_response(false, 'validation error!', ['email' => "this email is incorrect."], 400);
                 }
             } else {
