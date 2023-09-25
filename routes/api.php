@@ -52,21 +52,21 @@ use App\Mail\TestEmail;
 //     return $request->user();
 // });
 
-Route::get('/test-email-for-development', function () {
-    // Replace 'youremail@example.com' with your recipient's email address
-    $recipientEmail = 'mawanher07@gmail.com';
+// Route::get('/test-email-for-development', function () {
+//     // Replace 'youremail@example.com' with your recipient's email address
+//     $recipientEmail = 'mawanher07@gmail.com';
 
-    // Send a test email
-    try {
-        Mail::to($recipientEmail)->send(new TestEmail());
-        Log::info('Test email sent successfully.');
-    } catch (\Exception $e) {
-        Log::error('Failed to send test email: ' . $e->getMessage());
-        return "Failed to send test email: " . $e->getMessage();
-    }
+//     // Send a test email
+//     try {
+//         Mail::to($recipientEmail)->send(new TestEmail());
+//         Log::info('Test email sent successfully.');
+//     } catch (\Exception $e) {
+//         Log::error('Failed to send test email: ' . $e->getMessage());
+//         return "Failed to send test email: " . $e->getMessage();
+//     }
 
-    return "Test email sent successfully!";
-});
+//     return "Test email sent successfully!";
+// });
 
 Route::prefix('v1')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
