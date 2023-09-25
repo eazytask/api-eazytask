@@ -8,9 +8,6 @@
     Please don't share your credentials with anyone and after login change your password. Your
     account temporary login credential below-
 
-    User Email: {{ $email }}
-    User Password: {{ $user_password }}
-
     @component('mail::button', ['url' => 'https://eazytask.au'])
         Login Now
     @endcomponent
