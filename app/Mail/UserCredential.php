@@ -37,6 +37,7 @@ class UserCredential extends Mailable
     {
         return $this->subject('Account Credentials')
         ->from('admin@eazytask.au', 'Eazytask')
-        ->view('emails.user-password', ['name' => $notifiable->name,'email' => $notifiable->email,'user_password' => $this->password,'company'=>$this->company]);
+        ->markdown('emails.user-password')
+        ->with(['name' => $notifiable->name,'email' => $notifiable->email,'user_password' => $this->password,'company'=>$this->company]);
     }
 }
