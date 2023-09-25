@@ -35,7 +35,7 @@ class UserCredential extends Mailable
      */
     public function build()
     {
-        return $this->subject('Account Credentials Eazytask')
+        return $this->subject('Your Eazytask Account')
         ->markdown('emails.user-password')
         ->with(['name' => $notifiable->name,'email' => $notifiable->email,'user_password' => $this->password,'company'=>$this->company]);
     }
