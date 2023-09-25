@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ForgetPassword extends Mailable
+class UserCredential extends Mailable
 {
     use SerializesModels; //Queueable, 
     protected $name;
