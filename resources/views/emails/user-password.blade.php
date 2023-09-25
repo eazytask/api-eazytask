@@ -50,13 +50,7 @@
                                                                     <tr>
                                                                         <td
                                                                             style="text-align:center;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'">
-                                                                            <a href="https://eazytask.au"
-                                                                                class="m_-696983200501294590button"
-                                                                                rel="noopener"
-                                                                                style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';border-radius:4px;color:#fff;display:inline-block;overflow:hidden;text-decoration:none;background-color:#2d3748;border-bottom:8px solid #2d3748;border-left:18px solid #2d3748;border-right:18px solid #2d3748;border-top:8px solid #2d3748"
-                                                                                target="_blank"
-                                                                                data-saferedirecturl="https://www.google.com/url?q=https://eazytask.au&amp;source=gmail&amp;ust=1686933787476000&amp;usg=AOvVaw04_poale2ij8x8nn4pe6MO">Login
-                                                                                Now</a>
+
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
@@ -77,7 +71,7 @@
 
                             <p style="line-height: 24px">
                                 Regards, <br />
-                                www.eazytask.au
+                                {{ config('app.name') }}
 
                                 {{-- @yield('title', app_name()) --}}
                             </p>
