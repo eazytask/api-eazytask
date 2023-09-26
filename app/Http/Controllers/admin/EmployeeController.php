@@ -9,7 +9,7 @@ use App\Models\Employee;
 use App\Models\User;
 use App\Models\UserCompliance;
 use App\Models\UserRole;
-use App\Notifications\ExistingUserNotification;
+// use App\Notifications\ExistingUserNotification;
 // use App\Notifications\UserCredential;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Validator;
 use Image;
 use App\Mail\TestEmail;
 use App\Mail\UserCredential;
+use App\Mail\ExistingUserNotification;
 use Illuminate\Support\Facades\Mail;
 
 class EmployeeController extends Controller
@@ -100,7 +101,9 @@ class EmployeeController extends Controller
             } else {
                 $GLOBALS['data'] = $user;
                 try {
-                    $mail = $GLOBALS['data']->notify(new ExistingUserNotification($request->name, Auth::user()->company->company));
+                    $mail = Mail::to($user->email)->send(new ExistingUserNotification($request->name, Auth::user()->company->company));
+
+                    // $mail = $GLOBALS['data']->notify(new ExistingUserNotification($request->name, Auth::user()->company->company));
                 } catch (\Exception $e) {
                     return response()->json([
                         'message' => 'Sorry! this email is incorrect.',
