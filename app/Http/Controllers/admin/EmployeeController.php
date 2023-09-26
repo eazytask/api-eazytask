@@ -76,7 +76,7 @@ class EmployeeController extends Controller
                     $password = substr(str_shuffle($chars), 0, 10);
                 }
                 $email_data['email'] = $request['email'];
-                $email_data['name'] = $request['name'];
+                $email_data['name'] = $request['fname'];
                 $email_data['mname'] = $request['mname'];
                 $email_data['lname'] = $request['lname'];
                 $email_data['password'] = $password;
