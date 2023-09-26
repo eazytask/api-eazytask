@@ -10,7 +10,7 @@ use App\Models\User;
 use App\Models\UserCompliance;
 use App\Models\UserRole;
 use App\Notifications\ExistingUserNotification;
-use App\Notifications\UserCredential;
+// use App\Notifications\UserCredential;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Image;
 use App\Mail\TestEmail;
+use App\Mail\UserCredential;
+use Illuminate\Support\Facades\Mail;
 
 class EmployeeController extends Controller
 {
@@ -89,13 +91,14 @@ class EmployeeController extends Controller
                 $user->save();
                 $GLOBALS['data'] = $user;
                 try {
-                    $mail = $GLOBALS['data']->notify(new UserCredential($email_data));
+                    $mail = Mail::to($user->email)->send(new UserCredential($email_data));
+                    // $mail = $GLOBALS['data']->notify(new UserCredential($email_data));
                 } catch (\Exception $e) {
                     // $GLOBALS['data']->delete();
                     send_response(false, 'validation error!', ['email' => "this email is incorrect."], 400);
                 }
             } else {
-                $GLOBALS['data'] = $user;
+                $GLOBALS['data'] = $user;dd(1);
                 try {
                     $mail = $GLOBALS['data']->notify(new ExistingUserNotification($request->name, Auth::user()->company->company));
                 } catch (\Exception $e) {
