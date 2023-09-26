@@ -9,7 +9,7 @@ use Illuminate\Queue\SerializesModels;
 
 class UserCredential extends Mailable
 {
-    use Queueable, SerializesModels; 
+    use SerializesModels; //Queueable,  
     protected $name;
     protected $email;
     protected $password;

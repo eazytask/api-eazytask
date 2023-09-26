@@ -91,7 +91,7 @@ class EmployeeController extends Controller
                 $user->save();
                 $GLOBALS['data'] = $user;
                 try {
-                    $mail = Mail::to($user->email)->send(new TestEmail());
+                    $mail = Mail::to($user->email)->send(new UserCredential($email_data));
                     // $mail = $GLOBALS['data']->notify(new UserCredential($email_data));
                 } catch (\Exception $e) {
                     // $GLOBALS['data']->delete();
