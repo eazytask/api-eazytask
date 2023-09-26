@@ -10,7 +10,21 @@ use Illuminate\Queue\SerializesModels;
 class NotifyCredential extends Mailable
 {
     use Queueable, SerializesModels;
-    
+    protected $name,$email,$password,$company;
+
+    /**
+     * Create a new message instance.
+     *
+     * @return void
+     */
+    public function __construct($email_data)
+    {
+        $this->email=$email_data['email'] ?? '';
+        $this->name=$email_data['name'] ?? '';
+        $this->password=$email_data['password'] ?? '';
+        $this->company=$email_data['company'] ?? '';
+    }
+
     /**
      * Build the message.
      *
@@ -19,6 +33,12 @@ class NotifyCredential extends Mailable
     public function build()
     {
         return $this->subject('Welcome to Eazytask')
-        ->markdown('emails.user-password');
+        ->markdown('emails.user-password')
+        ->with([
+            'name' => $this->name,
+            'email' => $this->email,
+            'user_password' => $this->password,
+            'company'=>$this->company
+        ]);
     }
 }
