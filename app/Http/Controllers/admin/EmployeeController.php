@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Image;
 use App\Mail\TestEmail;
-use App\Mail\UserCredential;
+use App\Mail\NotifyCredential;
 use Illuminate\Support\Facades\Mail;
 
 class EmployeeController extends Controller
@@ -91,14 +91,14 @@ class EmployeeController extends Controller
                 $user->save();
                 $GLOBALS['data'] = $user;
                 try {
-                    $mail = Mail::to($user->email)->send(new UserCredential($email_data));
+                    $mail = Mail::to($user->email)->send(new NotifyCredential($email_data));
                     // $mail = $GLOBALS['data']->notify(new UserCredential($email_data));
                 } catch (\Exception $e) {
                     // $GLOBALS['data']->delete();
                     send_response(false, 'validation error!', ['email' => "this email is incorrect."], 400);
                 }
             } else {
-                $GLOBALS['data'] = $user;dd(1);
+                $GLOBALS['data'] = $user;
                 try {
                     $mail = $GLOBALS['data']->notify(new ExistingUserNotification($request->name, Auth::user()->company->company));
                 } catch (\Exception $e) {
