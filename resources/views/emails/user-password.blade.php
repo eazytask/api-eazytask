@@ -1,5 +1,5 @@
 @component('mail::message')
-    # Hello {{ ucwords($name) }},
+    # Hello,
 
     ---
     Thanks,<br>
