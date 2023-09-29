@@ -19,7 +19,7 @@ class MessagesController extends Controller
 {
     public function index()
     {
-        // try {
+        try {
             $projects = Project::where('company_code', Auth::user()->company_roles->first()->company->id)->orderBy('pName', 'asc')->get()->pluck('id')->toArray();
             
             $messages = Message::with('replies', 'confirms')->orderBy('created_at', 'DESC')->get();
@@ -43,14 +43,18 @@ class MessagesController extends Controller
             $messages = array_values($messages->toArray()); // 'reindex' array
 
             return send_response(true, 'Succesfully Fetch Messages', $messages);
-        // } catch (\Throwable $e) {
-        //     return send_response(false, 'something went wrong!', 400);
-        // }
+        } catch (\Throwable $e) {
+            return send_response(false, 'something went wrong!', 400);
+        }
     }
 
     public function store(Request $request)
     {
         try {
+            if (empty(array_diff($request->list_venue, ["all"]))) {
+                $request->list_venue = Project::where('company_code', Auth::user()->company_roles->first()->company->id)->orderBy('pName', 'asc')->get()->pluck('id')->toArray();
+            }
+            
             $message = Message::create([
                 'user_id' => Auth::user()->id,
                 'heading' => $request->heading,
@@ -115,6 +119,10 @@ class MessagesController extends Controller
             $message = Message::where('id', $request->message_id)->first();
 
             if (!empty($request->list_venue)) {
+                if (empty(array_diff($request->list_venue, ["all"]))) {
+                    $request->list_venue = Project::where('company_code', Auth::user()->company_roles->first()->company->id)->orderBy('pName', 'asc')->get()->pluck('id')->toArray();
+                }
+                
                 $message->list_venue = $request->list_venue;
             }
 
