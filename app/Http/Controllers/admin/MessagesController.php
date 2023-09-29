@@ -27,7 +27,7 @@ class MessagesController extends Controller
                 if (empty(array_diff($message->list_venue, ["all"]))) {
                     // Thats all
                 }elseif(!empty(array_diff($message->list_venue, $projects))) {
-                    $messages[$key] = null;
+                    unset($messages[$key]);
                 }
                 // Access message properties
                 $message->purposes = $message->getListVenue();
@@ -39,6 +39,8 @@ class MessagesController extends Controller
                     $message->my_confirm = false;
                 }
             }
+
+            $messages = array_values($messages->toArray()); // 'reindex' array
 
             return send_response(true, 'Succesfully Fetch Messages', $messages);
         // } catch (\Throwable $e) {
