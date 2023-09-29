@@ -19,10 +19,16 @@ class MessagesController extends Controller
 {
     public function index()
     {
-        try {
-            $projects = Project::where('company_code', Auth::user()->company_roles->first()->company->id)->orderBy('pName', 'asc')->get();
+        // try {
+            $projects = Project::where('company_code', Auth::user()->company_roles->first()->company->id)->orderBy('pName', 'asc')->get()->pluck('id')->toArray();
+            
             $messages = Message::with('replies', 'confirms')->orderBy('created_at', 'DESC')->get();
-            foreach ($messages as $message) {
+            foreach ($messages as $key => $message) {
+                if (empty(array_diff($message->list_venue, ["all"]))) {
+                    // Thats all
+                }elseif(!empty(array_diff($message->list_venue, $projects))) {
+                    unset($messages[$key]);
+                }
                 // Access message properties
                 $message->purposes = $message->getListVenue();
                 $message->replies = $message->replies;
@@ -35,9 +41,9 @@ class MessagesController extends Controller
             }
 
             return send_response(true, 'Succesfully Fetch Messages', $messages);
-        } catch (\Throwable $e) {
-            return send_response(false, 'something went wrong!', 400);
-        }
+        // } catch (\Throwable $e) {
+        //     return send_response(false, 'something went wrong!', 400);
+        // }
     }
 
     public function store(Request $request)
