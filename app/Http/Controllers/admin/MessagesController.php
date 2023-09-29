@@ -27,7 +27,7 @@ class MessagesController extends Controller
                 if (empty(array_diff($message->list_venue, ["all"]))) {
                     // Thats all
                 }elseif(!empty(array_diff($message->list_venue, $projects))) {
-                    unset($messages[$key]);
+                    $messages[$key] = null;
                 }
                 // Access message properties
                 $message->purposes = $message->getListVenue();
