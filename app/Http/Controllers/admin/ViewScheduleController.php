@@ -143,7 +143,7 @@ class ViewScheduleController extends Controller
                     return send_response(true, 'roster updated successfully', new TimekeeperResource($timekeeper));
                 }
             }
-            return send_response(false, 'roster updated successfully', new TimekeeperResource($timekeeper));
+            return send_response(false, 'roster not updated', new TimekeeperResource($timekeeper));
         } catch (\Throwable $e) {
             return send_response(false, $e->getMessage(), [], 400);
         }

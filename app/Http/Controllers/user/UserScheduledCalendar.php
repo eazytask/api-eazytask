@@ -104,7 +104,7 @@ class UserScheduledCalendar extends Controller
             $timekeepers = TimeKeeper::where([
                 // ['employee_id', $employee->id],
                 ['time_keepers.company_code', Auth::user()->company_roles->first()->company->id],
-                ['time_keepers.roaster_type', 'Schedueled'],
+                // ['time_keepers.roaster_type', 'Schedueled'],
                 // $filter_roster_type,
                 $filter_project
             ])->whereBetween('time_keepers.roaster_date', [$start_date, $end_date])
