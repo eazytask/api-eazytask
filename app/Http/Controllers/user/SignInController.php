@@ -179,6 +179,7 @@ class SignInController extends Controller
             $timekeeper->roaster_status_id = roaster_status('Accepted');
             $timekeeper->roaster_type = 'Unschedueled';
             $timekeeper->remarks = $request->remarks;
+            $timekeeper->signin_comment = $request->signin_comment ?? null;
             $timekeeper->created_at = Carbon::now();
             $timekeeper->save();
 
