@@ -240,6 +240,7 @@ class KioskController extends Controller
         $timekeeper->roaster_status_id = roaster_status('Accepted');
         $timekeeper->roaster_type = 'Unschedueled';
         $timekeeper->remarks = $request->remarks;
+        $timekeeper->signin_comment = $request->comment ?? null;
         $timekeeper->created_at = Carbon::now();
         $timekeeper->save();
 
@@ -271,6 +272,7 @@ class KioskController extends Controller
         try {
             $roster = TimeKeeper::find($request->timekeeper_id);
             $roster->sing_in = Carbon::now();
+            $roster->signin_comment = $request->comment ?? null;
             $roster->save();
 
             if ($request->lat && $request->lon) {
@@ -317,6 +319,7 @@ class KioskController extends Controller
                 }
             }
             $roster->disableLogging();
+            $roster->signout_comment = $request->comment ?? null;
             $roster->save();
 
             if ($request->image) {
