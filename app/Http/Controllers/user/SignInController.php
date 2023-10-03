@@ -69,7 +69,7 @@ class SignInController extends Controller
         try {
             $roster = TimeKeeper::find($request->timekeeper_id);
             $roster->sing_in = Carbon::now();
-            $roster->signin_comment = $request->comment ?? null;
+            $roster->signin_comment = $request->signin_comment ?? null;
             $roster->save();
 
             if ($request->lat && $request->lon) {
@@ -212,7 +212,7 @@ class SignInController extends Controller
 
         if (!$roster->sing_out) {
             $roster->sing_out = Carbon::now();
-            $roster->signout_comment = request()->comment ?? null;
+            $roster->signout_comment = request()->signout_comment ?? null;
 
             if ($roster->roaster_type == 'Unschedueled') {
                 $now = Carbon::now();
