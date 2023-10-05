@@ -219,7 +219,7 @@ class ScheduledCalendarController extends Controller
                 $timekeepers = TimeKeeper::where([
                     ['employee_id', $employee->id],
                     ['company_code', Auth::user()->company_roles->first()->company->id],
-                    // ['roaster_type', 'Schedueled'],
+                    ['roaster_type', 'Schedueled'],
                     // $filter_roster_type,
                     $filter_roster_status,
                     $filter_project
