@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -221,17 +222,19 @@ class AuthController extends Controller
             if (!$user)
                 return send_response(false, 'validation error!', ['email'=>"we can't find this email"],400);
 
-                $token = Str::random(6);
-            $passwordReset = PasswordReset::updateOrCreate(
-                ['email' => $user->email],
-                [
-                    'email' => $user->email,
-                    'token' => $token
-                ]
-            );
+                // $token = Str::random(6);
+                // $passwordReset = PasswordReset::updateOrCreate(
+                // ['email' => $user->email],
+                // [
+                //     'email' => $user->email,
+                //     'token' => $token
+                // ]
+            // );
+            $token = Password::getRepository()->create($user);
+            $user->sendPasswordResetNotification($token);
           
-            if ($user && $passwordReset)
-                    Mail::to($user->email)->send(new ForgetPassword($token, $user));
+            // if ($user && $passwordReset)
+            //         Mail::to($user->email)->send(new ForgetPassword($token, $user));
                 
             return send_response(true, "password reset link sent to your email.");
         } catch (\Throwable $e) {

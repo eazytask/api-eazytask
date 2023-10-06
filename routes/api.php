@@ -71,7 +71,7 @@ use App\Mail\TestEmail;
 Route::prefix('v1')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/admin/login', [AuthController::class, 'admin_login']);
-    Route::post('/forget/password', [AuthController::class, 'forget_password']);
+    Route::post('/forget/password', [AuthController::class, 'forget_password'])->name('password.reset');
     Route::post('/reset/password', [AuthController::class, 'reset_password']);
 
     Route::middleware(['auth:api'])->group(function () {
