@@ -71,8 +71,11 @@ use App\Mail\TestEmail;
 Route::prefix('v1')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/admin/login', [AuthController::class, 'admin_login']);
-    Route::post('/forget/password', [AuthController::class, 'forget_password'])->name('password.reset');
+    Route::post('/forget/password', [AuthController::class, 'forget_password']);
     Route::post('/reset/password', [AuthController::class, 'reset_password']);
+    Route::get('/handler-reset', function () {
+        return redirect('https://eazytask.au/password/reset/'.request()->get('token').'?email='.request()->get('email'));
+    })->name('password.reset');
 
     Route::middleware(['auth:api'])->group(function () {
         # authentication routes
