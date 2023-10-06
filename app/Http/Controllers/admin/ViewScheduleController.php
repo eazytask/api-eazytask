@@ -121,7 +121,8 @@ class ViewScheduleController extends Controller
         
 
             if (isset($timekeeper)) {
-                if ($timekeeper->shift_end <= Carbon::now() && $timekeeper->is_approved == 0) {
+                // $timekeeper->shift_end <= Carbon::now() && 
+                if ($timekeeper->is_approved == 0) {
                     $shift_start = Carbon::parse($timekeeper->roaster_date . $request->app_start);
                     $shift_end = Carbon::parse($shift_start)->addMinute($request->app_duration * 60);
 
