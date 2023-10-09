@@ -348,14 +348,16 @@ class ScheduledCalendarController extends Controller
     {
         $week = Carbon::parse($request->week);
 
-      
+        $projects = Project::where([
+            ['company_code', auth()->user()->company_roles->first()->company->id],
+            ['status', 1]
+        ])->get();
 
-            $projects = Project::where([
-                ['company_code', auth()->user()->company_roles->first()->company->id],
-                ['status', 1]
-            ])->get();
-            $filter_project = $request->project ? ['project_id', $request->project] : ['project_id', '>', 0];
-        
+        if (empty($request->project)) {
+            return send_response(true, '', ["projects" => []]);
+        }
+
+        $filter_project = ['project_id', $request->project];
 
         $start_date = Carbon::parse($week)->startOfWeek();
         $end_date = Carbon::parse($week)->endOfWeek();
@@ -368,8 +370,7 @@ class ScheduledCalendarController extends Controller
         $sat_ = [];
         $sun_ = [];
         
-    
-            $timekeepers = TimeKeeper::where([
+        $timekeepers = TimeKeeper::where([
             // ['employee_id', $employee->id],
             ['time_keepers.company_code', Auth::user()->company_roles->first()->company->id],
             // ['time_keepers.roaster_type', 'Schedueled'],
