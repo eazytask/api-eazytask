@@ -426,8 +426,8 @@ class ScheduledCalendarController extends Controller
             return send_response(true, '', [
                 'week' => $start_date->format('d M, Y') . ' -  ' . $end_date->format('d M, Y'),
                 "current_project" => $request->project?(int)$request->project:null,
-                "projects" => [],
-                "job_type" => $job_type,
+                "projects" => UserProjectResource::collection($projects),
+                "job_type" => [],
                 'data' => [],
             ]);
         }
