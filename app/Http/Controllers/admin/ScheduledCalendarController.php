@@ -352,21 +352,10 @@ class ScheduledCalendarController extends Controller
             ['company_code', auth()->user()->company_roles->first()->company->id],
             ['status', 1]
         ])->get();
+        $filter_project = $request->project ? ['project_id', $request->project] : ['project_id', '>', 0];
 
         $start_date = Carbon::parse($week)->startOfWeek();
         $end_date = Carbon::parse($week)->endOfWeek();
-
-        if (empty($request->project)) {
-            return send_response(true, '', [
-                'week' => $start_date->format('d M, Y') . ' -  ' . $end_date->format('d M, Y'),
-                "current_project" => $request->project?(int)$request->project:null,
-                "projects" => [],
-                "job_type" => [],
-                'data' => [],
-            ]);
-        }
-
-        $filter_project = ['project_id', $request->project];
 
         $mon_ = [];
         $tue_ = [];
@@ -431,6 +420,16 @@ class ScheduledCalendarController extends Controller
                 array_push($job_type, $timekeeper->job_type);
             }
             
+        }
+
+        if (empty($request->project)) {
+            return send_response(true, '', [
+                'week' => $start_date->format('d M, Y') . ' -  ' . $end_date->format('d M, Y'),
+                "current_project" => $request->project?(int)$request->project:null,
+                "projects" => [],
+                "job_type" => $job_type,
+                'data' => [],
+            ]);
         }
 
         return send_response(true, '', [
