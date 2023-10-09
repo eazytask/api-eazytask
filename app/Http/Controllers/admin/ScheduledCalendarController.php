@@ -171,7 +171,9 @@ class ScheduledCalendarController extends Controller
     public function get_roster_enrty(Request $request)
     {
         $week = Carbon::parse($request->week);
-        $filter_project = $request->project ? ['project_id', $request->project] : ['employee_id', '>', 0];
+        
+        $filter_project = ['project_id', $request->project];
+
         $filter_roster_status = $request->roster_status ? ['roaster_status_id', $request->roster_status] : ['employee_id', '>', 0];
         // $filter_roster_type = $request->roster_type? ['roaster_type', $request->roster_type] : ['employee_id', '>', 0];
 
@@ -184,6 +186,16 @@ class ScheduledCalendarController extends Controller
             ['company_code', Auth::user()->company_roles->first()->company->id],
             ['Status', '1'],
         ])->orderBy('pName', 'asc')->get();
+
+        if (empty($request->project)) {
+            return send_response(true, '', [
+                'week' => $start_date->format('d M, Y') . ' -  ' . $end_date->format('d M, Y'),
+                'total_hours' => (string) 0,
+                'total_amount' => (string) 0,
+                'projects' => $projects,
+                'data' => [],
+            ]);
+        }
 
         $employees = DB::table('time_keepers')
             ->select(DB::raw(
