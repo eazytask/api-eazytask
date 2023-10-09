@@ -353,14 +353,20 @@ class ScheduledCalendarController extends Controller
             ['status', 1]
         ])->get();
 
+        $start_date = Carbon::parse($week)->startOfWeek();
+        $end_date = Carbon::parse($week)->endOfWeek();
+
         if (empty($request->project)) {
-            return send_response(true, '', ["projects" => []]);
+            return send_response(true, '', [
+                'week' => $start_date->format('d M, Y') . ' -  ' . $end_date->format('d M, Y'),
+                "current_project" => $request->project?(int)$request->project:null,
+                "projects" => UserProjectResource::collection($projects),
+                "job_type" => [],
+                'data' => [],
+            ]);
         }
 
         $filter_project = ['project_id', $request->project];
-
-        $start_date = Carbon::parse($week)->startOfWeek();
-        $end_date = Carbon::parse($week)->endOfWeek();
 
         $mon_ = [];
         $tue_ = [];
