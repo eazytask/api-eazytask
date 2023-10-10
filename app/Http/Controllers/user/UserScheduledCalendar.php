@@ -69,7 +69,7 @@ class UserScheduledCalendar extends Controller
         } else {
             $projects = $this->get_projects($week);
             if (!$request->project) {
-                $request->project = $projects->first() ? $projects->first()->id : '';
+                // $request->project = $projects->first() ? $projects->first()->id : '';
             }
             $filter_project = ['project_id', $request->project];
             // $filter_project = $request->project ? ['project_id', $request->project] : ['project_id', 0];
