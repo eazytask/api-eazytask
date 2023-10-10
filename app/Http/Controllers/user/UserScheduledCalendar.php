@@ -64,17 +64,29 @@ class UserScheduledCalendar extends Controller
                 ['company_code', auth()->user()->company_roles->first()->company->id],
                 ['status', 1]
             ])->get();
-            $filter_project = $request->project ? ['project_id', $request->project] : ['project_id', '>', 0];
+            // $filter_project = $request->project ? ['project_id', $request->project] : ['project_id', '>', 0];
+            $filter_project = ['project_id', $request->project];
         } else {
             $projects = $this->get_projects($week);
             if (!$request->project) {
                 $request->project = $projects->first() ? $projects->first()->id : '';
             }
-            $filter_project = $request->project ? ['project_id', $request->project] : ['project_id', 0];
+            $filter_project = ['project_id', $request->project];
+            // $filter_project = $request->project ? ['project_id', $request->project] : ['project_id', 0];
         }
 
         $start_date = Carbon::parse($week)->startOfWeek();
         $end_date = Carbon::parse($week)->endOfWeek();
+
+        if (empty($request->project)) {
+            return send_response(true, '', [
+                'week' => $start_date->format('d M, Y') . ' -  ' . $end_date->format('d M, Y'),
+                "current_project" => $request->project?(int)$request->project:null,
+                "projects" => UserProjectResource::collection($projects),
+                "job_type" => [],
+                'data' => [],
+            ]);
+        }
 
         $mon_ = [];
         $tue_ = [];
