@@ -364,7 +364,8 @@ class ScheduledCalendarController extends Controller
             ['company_code', auth()->user()->company_roles->first()->company->id],
             ['status', 1]
         ])->get();
-        $filter_project = $request->project ? ['project_id', $request->project] : ['project_id', '>', 0];
+        
+        $filter_project = $request->project == 999 ? ['project_id', '>', 0] : ['project_id', $request->project];
 
         $start_date = Carbon::parse($week)->startOfWeek();
         $end_date = Carbon::parse($week)->endOfWeek();
@@ -434,7 +435,7 @@ class ScheduledCalendarController extends Controller
             
         }
 
-        if (empty($request->project)) {
+        if (empty($request->project) || $request->project == 0) {
             return send_response(true, '', [
                 'week' => $start_date->format('d M, Y') . ' -  ' . $end_date->format('d M, Y'),
                 "current_project" => $request->project?(int)$request->project:null,
