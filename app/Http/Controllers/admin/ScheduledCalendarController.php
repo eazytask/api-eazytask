@@ -172,7 +172,7 @@ class ScheduledCalendarController extends Controller
     {
         $week = Carbon::parse($request->week);
         
-        $filter_project = $request->project == 0 ? ['project_id', '>', 0] : ['project_id', $request->project];
+        $filter_project = $request->project == 999 ? ['project_id', '>', 0] : ['project_id', $request->project];
         
         $filter_roster_status = $request->roster_status ? ['roaster_status_id', $request->roster_status] : ['employee_id', '>', 0];
         // $filter_roster_type = $request->roster_type? ['roaster_type', $request->roster_type] : ['employee_id', '>', 0];
@@ -187,7 +187,7 @@ class ScheduledCalendarController extends Controller
             ['Status', '1'],
         ])->orderBy('pName', 'asc')->get();
 
-        if (empty($request->project)) {
+        if (empty($request->project) || $request->project == 0) {
             return send_response(true, '', [
                 'week' => $start_date->format('d M, Y') . ' -  ' . $end_date->format('d M, Y'),
                 'total_hours' => (string) 0,
