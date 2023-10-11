@@ -172,8 +172,8 @@ class ScheduledCalendarController extends Controller
     {
         $week = Carbon::parse($request->week);
         
-        $filter_project = ['project_id', $request->project];
-
+        $filter_project = $request->project == 0 ? ['project_id', '>', 0] : ['project_id', $request->project];
+        
         $filter_roster_status = $request->roster_status ? ['roaster_status_id', $request->roster_status] : ['employee_id', '>', 0];
         // $filter_roster_type = $request->roster_type? ['roaster_type', $request->roster_type] : ['employee_id', '>', 0];
 
