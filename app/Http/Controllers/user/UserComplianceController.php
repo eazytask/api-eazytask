@@ -45,12 +45,57 @@ class UserComplianceController extends Controller
                 $user_compliance->comment = $request->comment;
                 $user_compliance->expire_date = Carbon::parse($request->expire_date);
 
+                $img = $request->image;
+                $filename = null;
+                if ($img) {
+
+                    $folderPath = "images/compliance/";
+                    $image_parts = explode(";base64,", $img);
+                    $image_type_aux = explode("image/", $image_parts[0]);
+                    $image_type = $image_type_aux[1];
+                    $image_base64 = base64_decode($image_parts[1]);
+                    $img_name = date('sihdmy') . '.' . $image_type;
+
+                    $filename = $folderPath . $img_name;
+                    if (file_exists($user_compliance->document)) {
+                        unlink($user_compliance->document);
+                    }
+                    Image::make($image_base64)->save($filename);
+                    $filename = $filename;
+                }
+                if ($filename) {
+                    $user_compliance->document = $filename;
+                }
+
                 $exist_comp = $user_compliance->save();
             } else {
                 // $exist_comp->id = $exist_comp->id;
                 $exist_comp->certificate_no = $request->certificate_no;
                 $exist_comp->comment = $request->comment;
                 $exist_comp->expire_date = Carbon::parse($request->expire_date);
+
+                $img = $request->image;
+                $filename = null;
+                if ($img) {
+
+                    $folderPath = "images/compliance/";
+                    $image_parts = explode(";base64,", $img);
+                    $image_type_aux = explode("image/", $image_parts[0]);
+                    $image_type = $image_type_aux[1];
+                    $image_base64 = base64_decode($image_parts[1]);
+                    $img_name = date('sihdmy') . '.' . $image_type;
+
+                    $filename = $folderPath . $img_name;
+                    if (file_exists($exist_comp->document)) {
+                        unlink($exist_comp->document);
+                    }
+                    Image::make($image_base64)->save($filename);
+                    $filename = $filename;
+                }
+                if ($filename) {
+                    $exist_comp->document = $filename;
+                }
+
                 $exist_comp->save();
             }
             return send_response(true, 'compliance added successfully', new UserComplianceResource($exist_comp));
