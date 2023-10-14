@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class UserCredential extends Mailable
+class ExistingUserNotification extends Mailable
 {
     use SerializesModels; //Queueable,  
     protected $name,$company;
