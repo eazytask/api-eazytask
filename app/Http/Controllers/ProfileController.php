@@ -20,7 +20,7 @@ class ProfileController extends Controller
     {
         $all_notifications = Auth::user()->notifications;
         $notifications = [];
-        foreach ($all_notifications as $row) {
+        foreach ($all_notifications as $row) {dd($row);
             $noti = [];
             $noti['type'] = $row->data->type;
             $noti['status'] = $row->data->status;
