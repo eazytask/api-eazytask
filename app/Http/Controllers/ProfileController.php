@@ -25,7 +25,7 @@ class ProfileController extends Controller
             $noti['type'] = $row->data['type'];
             $noti['status'] = $row->data['status'];
             $noti['msg'] = $row->data['msg'];
-            $noti['image'] = $row->sender->image ? asset($row->sender->image) : '';
+            $noti['image'] = optional($row->sender)->image ? asset(optional($row->sender)->image) : '';
             $noti['created_at'] = Carbon::parse($row->created_at)->diffForHumans();
             $noti['is_read'] = $row->read_at ? true : false;
 
