@@ -35,14 +35,14 @@ class SignInController extends Controller
         })->where(function ($q) {
             $q->where('sing_in', '!=', null);
             $q->orWhere(function ($q) {
-                $q->where('shift_end', '>', Carbon::now());
+                // $q->where('shift_end', '>', Carbon::now());
             });
         })->where(function ($q) {
-            $q->where('roaster_date', Carbon::now()->format("Y-m-d"));
-            $q->orWhere(function ($q) {
-                $q->where('roaster_date', Carbon::now()->subDay()->format("Y-m-d"));
-                $q->where('shift_end', '>', Carbon::now()->format("Y-m-d"));
-            });
+            // $q->where('roaster_date', Carbon::now()->format("Y-m-d"));
+            // $q->orWhere(function ($q) {
+            //     $q->where('roaster_date', Carbon::now()->subDay()->format("Y-m-d"));
+                // $q->where('shift_end', '>', Carbon::now()->format("Y-m-d"));
+            // });
         })
             ->orderBy('shift_start', 'asc')->first();
 
