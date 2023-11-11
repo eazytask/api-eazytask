@@ -72,7 +72,7 @@ class PaymentController extends Controller
             $rosters = TimeKeeper::where([
                 ['employee_id', $request->employee_id],
                 // ['company_code', Auth::user()->company_roles->first()->company->id],
-                ['payment_status', 0],
+                ['payment_status', '=', 0],
                 $filter_project,
             ])
                 ->orderBy('roaster_date', 'asc')
