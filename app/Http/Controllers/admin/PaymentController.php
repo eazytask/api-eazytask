@@ -24,7 +24,7 @@ class PaymentController extends Controller
 
         $employees = DB::table('time_keepers')
             ->select(DB::raw(
-                '*',
+                'time_keepers.id as id',
                 'e.id as employee_id,
                 e.fname,
                 e.mname,
