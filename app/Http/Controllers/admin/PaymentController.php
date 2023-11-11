@@ -23,8 +23,9 @@ class PaymentController extends Controller
         $filter_employee = $request->employee_id ? ['employee_id', $request->employee_id] : ['employee_id', '>', 0];
 
         $employees = DB::table('time_keepers')
-            ->select(DB::raw(
+            ->select(
                 'time_keepers.id as id',
+                DB::raw(
                 'e.id as employee_id,
                 e.fname,
                 e.mname,
