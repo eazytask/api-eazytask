@@ -53,7 +53,7 @@ class PaymentController extends Controller
         //     })
         //     ->get();
         
-        $payments = paymentmaster::whereBetween('Payment_Date', [$start_date,$end_date])
+        $payments = paymentmaster::whereBetween('Payment_Date', [Carbon::parse($fromDate)->toDateString(), Carbon::parse($toDate)->toDateString()])
             ->where([
                 ['user_id',Auth::id()],
                 $filter_employee
