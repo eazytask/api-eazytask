@@ -66,6 +66,9 @@ class PaymentController extends Controller
             // Accessing total_hours for each paymentmaster
             $payment->total_hours = $payment->details->total_hours;
             $payment->total_amount = $payment->details->total_pay;
+            $payment->fname = $payment->employee->fname;
+            $payment->mname = $payment->employee->mname;
+            $payment->lname = $payment->employee->lname;
 
             // Do something with $total_hours
         }
