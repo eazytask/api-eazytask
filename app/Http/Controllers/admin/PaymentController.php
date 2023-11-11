@@ -26,14 +26,14 @@ class PaymentController extends Controller
             ->select(
                 'time_keepers.id as id',
                 DB::raw(
-                'e.id as employee_id,
-                e.fname,
-                e.mname,
-                e.lname,
-                sum(time_keepers.duration) as total_hours,
-                sum(time_keepers.amount) as total_amount'
-
-            ))
+                    'e.id as employee_id,
+                    e.fname,
+                    e.mname,
+                    e.lname,
+                    sum(time_keepers.duration) as total_hours,
+                    sum(time_keepers.amount) as total_amount'
+                )
+            )
             ->leftJoin('employees as e', 'e.id', 'time_keepers.employee_id')
             ->where([
                 ['e.company', Auth::user()->company_roles->first()->company->id],
