@@ -22,38 +22,46 @@ class PaymentController extends Controller
         $filter_project = $request->project_id ? ['project_id', $request->project_id] : ['employee_id', '>', 0];
         $filter_employee = $request->employee_id ? ['employee_id', $request->employee_id] : ['employee_id', '>', 0];
 
-        $employees = DB::table('time_keepers')
-            ->select(
-                'time_keepers.id as id',
-                DB::raw(
-                    'e.id as employee_id,
-                    e.fname,
-                    e.mname,
-                    e.lname,
-                    sum(time_keepers.duration) as total_hours,
-                    sum(time_keepers.amount) as total_amount'
-                )
-            )
-            ->leftJoin('employees as e', 'e.id', 'time_keepers.employee_id')
+        // $employees = DB::table('time_keepers')
+        //     ->select(
+        //         'time_keepers.id as id',
+        //         DB::raw(
+        //             'e.id as employee_id,
+        //             e.fname,
+        //             e.mname,
+        //             e.lname,
+        //             sum(time_keepers.duration) as total_hours,
+        //             sum(time_keepers.amount) as total_amount'
+        //         )
+        //     )
+        //     ->leftJoin('employees as e', 'e.id', 'time_keepers.employee_id')
+        //     ->where([
+        //         ['e.company', Auth::user()->company_roles->first()->company->id],
+        //         ['e.role', 3]
+        //     ])
+        //     ->groupBy("e.id")
+        //     ->orderBy('e.fname', 'asc')
+        //     ->whereBetween('roaster_date', [Carbon::parse($fromDate)->toDateString(), Carbon::parse($toDate)->toDateString()])
+        //     ->where([
+        //         ['payment_status', 0],
+        //         // ['sing_out','!=',null],
+        //         $filter_project,
+        //         $filter_employee
+        //     ])
+        //     ->where(function ($q) {
+        //         avoid_rejected_key($q);
+        //     })
+        //     ->get();
+        
+        $payments = paymentmaster::whereBetween('Payment_Date', [$start_date,$end_date])
             ->where([
-                ['e.company', Auth::user()->company_roles->first()->company->id],
-                ['e.role', 3]
-            ])
-            ->groupBy("e.id")
-            ->orderBy('e.fname', 'asc')
-            ->whereBetween('roaster_date', [Carbon::parse($fromDate)->toDateString(), Carbon::parse($toDate)->toDateString()])
-            ->where([
-                ['payment_status', 0],
-                // ['sing_out','!=',null],
-                $filter_project,
+                ['user_id',Auth::id()],
                 $filter_employee
             ])
-            ->where(function ($q) {
-                avoid_rejected_key($q);
-            })
+            ->orderBy('Payment_Date','desc')
             ->get();
 
-        return send_response(true, '', $employees);
+        return send_response(true, '', $payments);
     }
 
     public function get_rosters(Request $request)
