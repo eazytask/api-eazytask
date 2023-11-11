@@ -64,8 +64,8 @@ class PaymentController extends Controller
         // Now you can loop through $payments and access total_hours
         foreach ($payments as $payment) {
             // Accessing total_hours for each paymentmaster
-            $total_hours = $payment->details->total_hours;
-            $total_amount = $payment->details->total_pay;
+            $payment->total_hours = $payment->details->total_hours;
+            $payment->total_amount = $payment->details->total_pay;
 
             // Do something with $total_hours
         }
