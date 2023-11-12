@@ -85,23 +85,74 @@ class PaymentController extends Controller
             if ($validator->fails())
                 return send_response(false, 'validation error!', $validator->errors(), 400);
 
-            $fromDate = $request->start_date ? $request->start_date : Carbon::now()->startOfYear();
-            $toDate = $request->end_date ? $request->end_date : Carbon::now();
+            $fromDate = $request->start_date ? Carbon::parse($request->start_date)->format('Y-m-d') : Carbon::now()->startOfYear();
+            $toDate = $request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d') : Carbon::now();
             $filter_project = $request->project_id ? ['project_id', $request->project_id] : ['employee_id', '>', 0];
 
-            $rosters = TimeKeeper::where([
-                ['employee_id', $request->employee_id],
-                // ['company_code', Auth::user()->company_roles->first()->company->id],
-                ['payment_status', '=', 0],
-                $filter_project,
-            ])
-                ->orderBy('roaster_date', 'asc')
-                ->orderBy('shift_start', 'asc')
-                ->whereBetween('roaster_date', [$fromDate, $toDate])
-                ->where(function ($q) {
+            // $rosters = TimeKeeper::where([
+            //     ['employee_id', $request->employee_id],
+            //     // ['company_code', Auth::user()->company_roles->first()->company->id],
+            //     ['payment_status', '=', 0],
+            //     $filter_project,
+            // ])
+            //     ->orderBy('roaster_date', 'asc')
+            //     ->orderBy('shift_start', 'asc')
+            //     ->whereBetween('roaster_date', [$fromDate, $toDate])
+            //     ->where(function ($q) {
+            //         avoid_rejected_key($q);
+            //     })
+            //     ->get();
+
+            // $rosters = DB::table('time_keepers')
+            //     ->select(DB::raw(
+            //         'e.* ,
+            //         e.fname as name,
+            //         sum(time_keepers.duration) as total_hours,
+            //         sum(time_keepers.amount) as total_amount ,
+            //         count(time_keepers.id) as record'
+    
+            //     ))
+            //     ->leftJoin('employees as e', 'e.id', 'time_keepers.employee_id')
+            //     ->where([
+            //         ['employee_id', $request->employee_id],
+            //         ['e.company', Auth::user()->company_roles->first()->company->id],
+            //         ['e.role', 3]
+            //     ])
+            //     ->groupBy("e.id")
+            //     ->orderBy('e.fname', 'asc')
+            //     ->whereBetween('roaster_date', [$fromDate, $toDate])
+            //     ->where([
+            //         ['payment_status', 0],
+            //         // ['sing_out','!=',null],
+            //         $filter_project
+            //     ])
+            //     ->where(function ($q) {
+            //         avoid_rejected_key($q);
+            //     })
+            //     ->get();
+
+            $query = TimeKeeper::where([
+                    ['employee_id', $request->employee_id],
+                    ['time_keepers.company_code', Auth::user()->company_roles->first()->company->id],
+                    ['payment_status', 0],
+                    $filter_project,
+                    ])
+                    ->leftJoin('employees as e', 'e.id', 'time_keepers.employee_id')
+                    ->leftJoin('projects as p', 'p.id', 'time_keepers.project_id')
+                    ->orderBy('roaster_date','asc')
+                    ->orderBy('shift_start','asc')
+                    ->whereBetween('roaster_date', [$fromDate, $toDate])
+                    ->where(function ($q) {
                     avoid_rejected_key($q);
-                })
-                ->get();
+                    })
+                    ->select('time_keepers.*', 'p.pName as project_name', 'e.fname', 'e.mname', 'e.lname');
+
+            $rosters = $query->get();
+            // $total_hours = $query->sum('duration');
+            // $total_amount = $query->sum('amount');
+            // $rosters->total_hours = $total_hours;
+            // dd($rosters->total_hours);
+
             return send_response(true, '', $rosters);
         } catch (\Throwable $e) {
             return send_response(false, 'something went wrong!', 400);
