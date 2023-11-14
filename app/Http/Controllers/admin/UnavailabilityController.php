@@ -12,12 +12,14 @@ use Illuminate\Support\Facades\Validator;
 
 class UnavailabilityController extends Controller
 {
+    // THIS IS WHAT WE USED 
+    // NOT LEAVE CONTROLLER
     public function index()
     {
         $data = Myavailability::where([
             ['company_code', Auth::user()->company_roles->first()->company->id],
             ['end_date','>=',Carbon::now()],
-            ['is_leave', 0]
+            // ['is_leave', 0]
         ])
         ->leftJoin('employees', 'employees.id', '=', 'myavailabilities.employee_id')
         ->select('myavailabilities.*', 'employees.fname', 'employees.mname', 'employees.lname', 'employees.image')
