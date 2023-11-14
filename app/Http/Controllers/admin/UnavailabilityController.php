@@ -80,6 +80,7 @@ class UnavailabilityController extends Controller
                 $single->end_date = Carbon::parse($request->end_date);
                 $single->leave_type_id = $request->leave_type_id;
                 $single->total = $single->start_date->floatDiffInRealDays($single->end_date) + 1;
+                $single->status = $request->status;
 
                 $single->save();
             }
