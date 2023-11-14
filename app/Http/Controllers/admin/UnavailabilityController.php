@@ -18,7 +18,11 @@ class UnavailabilityController extends Controller
             ['company_code', Auth::user()->company_roles->first()->company->id],
             ['end_date','>=',Carbon::now()],
             ['is_leave', 0]
-        ])->orderBy('employee_id', 'asc')->get();
+        ])
+        ->leftJoin('employees', 'employees.id', '=', 'myavailabilities.employee_id')
+        ->select('myavailabilities.*', 'employees.fname', 'employees.mname', 'employees.lname')
+        ->orderBy('myavailabilities.employee_id', 'asc')
+        ->get();
 
         // return send_response(true, '', UnavailabilityResource::collection($data));
         return send_response(true, '', $data);
