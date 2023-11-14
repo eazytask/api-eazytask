@@ -17,7 +17,10 @@ class UserUnavailabilityCntroller extends Controller
             ['user_id', Auth::user()->employee->user_id],
             ['company_code', Auth::user()->employee->company],
             ['is_leave', 0]
-        ])->get();
+        ])
+        ->leftJoin('employees', 'employees.id', '=', 'myavailabilities.employee_id')
+        ->select('myavailabilities.*', 'employees.fname', 'employees.mname', 'employees.lname')
+        ->get();
 
         return send_response(true, '', $data);
     }
