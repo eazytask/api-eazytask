@@ -51,7 +51,6 @@ class UnavailabilityController extends Controller
             $single->end_date = Carbon::parse($request->end_date);
             $single->leave_type_id = $request->leave_type_id;
             $single->total = $single->start_date->floatDiffInRealDays($single->end_date) + 1;
-            $sigle->is_leave = $request->type == 'leave' ? 1 : 0;
             $single->save();
 
             return send_response(true, 'availability added successfully', new UnavailabilityResource($single));
