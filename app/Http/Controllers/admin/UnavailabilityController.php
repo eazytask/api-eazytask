@@ -20,7 +20,7 @@ class UnavailabilityController extends Controller
             ['is_leave', 0]
         ])
         ->leftJoin('employees', 'employees.id', '=', 'myavailabilities.employee_id')
-        ->select('myavailabilities.*', 'employees.fname', 'employees.mname', 'employees.lname')
+        ->select('myavailabilities.*', 'employees.fname', 'employees.mname', 'employees.lname', 'employees.image')
         ->orderBy('myavailabilities.employee_id', 'asc')
         ->get();
 
