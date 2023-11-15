@@ -73,7 +73,7 @@ class UnavailabilityController extends Controller
                     ['status', '>=', 'approved'],
                 ])
                 ->join('leave_types', 'leave_types.id', '=', 'myavailabilities.leave_type_id')
-                ->select('myavailabilities.*', 'leave_types.name as leave_type_id')
+                ->select('myavailabilities.*', 'leave_types.name as leave_name')
                 ->orderBy('start_date', 'desc')
                 ->get();
 
