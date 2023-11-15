@@ -57,7 +57,7 @@ class UnavailabilityController extends Controller
                 // ['myavailabilities.start_date', '>=', $start_date],
                 // // ['myavailabilities.end_date', '<=', $end_date],
                 // ['myavailabilities.start_date', '<=', $end_date],
-                ['myavailabilities.is_leave', 0]
+                // ['myavailabilities.is_leave', 0]
             ])
             ->groupBy("e.id")
             ->orderBy('fname','asc')
