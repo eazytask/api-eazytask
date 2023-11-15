@@ -119,6 +119,12 @@ Route::prefix('v1')->group(function () {
         
         # all admin routes
         Route::prefix('admin')->group(function () {
+            #my availability
+            Route::get('employee/unavailability', [UnavailabilityController::class, 'index']);
+            Route::post('employee/unavailability', [UnavailabilityController::class, 'store']);
+            Route::put('employee/unavailability', [UnavailabilityController::class, 'update']);
+            Route::delete('employee/unavailability/{id}', [UnavailabilityController::class, 'destroy']);
+            
             Route::middleware(['is_admin'])->group(function () {
 
                 #event
@@ -166,12 +172,6 @@ Route::prefix('v1')->group(function () {
                 Route::delete('employee/{id}', [EmployeeController::class, 'delete']);
                 Route::post('employee/compliance', [EmployeeController::class, 'filter_compliance']);
                 // Route::get('/compliance', [EmployeeController::class, 'compliances']);
-
-                #my availability
-                Route::get('employee/unavailability', [UnavailabilityController::class, 'index']);
-                Route::post('employee/unavailability', [UnavailabilityController::class, 'store']);
-                Route::put('employee/unavailability', [UnavailabilityController::class, 'update']);
-                Route::delete('employee/unavailability/{id}', [UnavailabilityController::class, 'destroy']);
 
                 #my leave day
                 Route::get('employee/leave/day', [LeaveDayController::class, 'index']);

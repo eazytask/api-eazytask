@@ -28,7 +28,7 @@ class UnavailabilityController extends Controller
         }
 
         $data = Myavailability::where([
-            ['company_code', Auth::user()->company_roles->first()->company->id],
+            // ['company_code', Auth::user()->company_roles->first()->company->id],
             ['end_date','>=',Carbon::now()],
             // ['is_leave', 0]
         ])
