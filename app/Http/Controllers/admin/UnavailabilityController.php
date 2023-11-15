@@ -65,13 +65,15 @@ class UnavailabilityController extends Controller
 
         foreach ($total_employee as $key => $item) {
             $list = Myavailability::where([
-                ['employee_id', $item->id],
-                ['company_code', Auth::user()->company_roles->first()->company->id],
-                // ['start_date', '>=', Carbon::parse($start_date)->toDateString()],
-                // // ['end_date', '<=', Carbon::parse($end_date)->toDateString()],
-                // ['start_date', '<=', Carbon::parse($end_date)->toDateString()],
-                ['status', '>=', 'approved'],
-            ])
+                    ['employee_id', $item->id],
+                    ['company_code', Auth::user()->company_roles->first()->company->id],
+                    // ['start_date', '>=', Carbon::parse($start_date)->toDateString()],
+                    // // ['end_date', '<=', Carbon::parse($end_date)->toDateString()],
+                    // ['start_date', '<=', Carbon::parse($end_date)->toDateString()],
+                    ['status', '>=', 'approved'],
+                ])
+                ->join('leave_types', 'leave_types.id', '=', 'myavailabilities.leave_type_id')
+                ->select('myavailabilities.*', 'leave_types.name as leave_type_id')
                 ->orderBy('start_date', 'desc')
                 ->get();
 
