@@ -69,7 +69,7 @@ class UnavailabilityController extends Controller
     
         try {
             $single = new Myavailability();
-            $single->user_id = Auth::id();;
+            $single->user_id = Auth::id();
             $single->employee_id = $employee;
             $single->company_code = Auth::user()->company_roles->first()->company->id;
             $single->remarks = $request->remarks;
