@@ -81,7 +81,7 @@ Route::prefix('v1')->group(function () {
         # authentication routes
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::post('/update/firebase/token', [AuthController::class, 'update_firebase_token']);
-
+       
         # switch company and role
         Route::get('companies', [SwitchCompanyController::class, 'index']);
         Route::get('admin/companies', [SwitchCompanyController::class, 'admin_companies']);
@@ -125,6 +125,14 @@ Route::prefix('v1')->group(function () {
             Route::put('employee/unavailability', [UnavailabilityController::class, 'update']);
             Route::delete('employee/unavailability/{id}', [UnavailabilityController::class, 'destroy']);
             
+            #employees
+            Route::get('employee', [EmployeeController::class, 'index']);
+            Route::post('employee', [EmployeeController::class, 'store']);
+            Route::put('employee', [EmployeeController::class, 'update']);
+            Route::delete('employee/{id}', [EmployeeController::class, 'delete']);
+            Route::post('employee/compliance', [EmployeeController::class, 'filter_compliance']);
+            // Route::get('/compliance', [EmployeeController::class, 'compliances']);
+
             Route::middleware(['is_admin'])->group(function () {
 
                 #event
@@ -164,14 +172,6 @@ Route::prefix('v1')->group(function () {
                 Route::put('timekeeper', [TimeKeeperController::class, 'update']);
                 Route::delete('timekeeper/{id}', [TimeKeeperController::class, 'delete']);
                 // Route::post('timekeeper/search', [TimekeeperController::class, 'search']);
-
-                #employees
-                Route::get('employee', [EmployeeController::class, 'index']);
-                Route::post('employee', [EmployeeController::class, 'store']);
-                Route::put('employee', [EmployeeController::class, 'update']);
-                Route::delete('employee/{id}', [EmployeeController::class, 'delete']);
-                Route::post('employee/compliance', [EmployeeController::class, 'filter_compliance']);
-                // Route::get('/compliance', [EmployeeController::class, 'compliances']);
 
                 #my leave day
                 Route::get('employee/leave/day', [LeaveDayController::class, 'index']);
