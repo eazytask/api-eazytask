@@ -9,18 +9,29 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use DB;
 
 class UnavailabilityController extends Controller
 {
     // THIS IS WHAT WE USED 
     // NOT LEAVE CONTROLLER
-    public function index()
+    public function index(Request $request)
     {
+        $user = Auth::user();
+
+        $employee = null;
+        if ($user->current_role > 2) {
+            $employee = DB::table('employees')->where('userID', Auth::user()->id)->where('company', $user->company_roles->first()->company->id)->first();
+        }
+
         $data = Myavailability::where([
             ['company_code', Auth::user()->company_roles->first()->company->id],
             ['end_date','>=',Carbon::now()],
             // ['is_leave', 0]
         ])
+        ->when($employee != null, function($q) use ($employee) {
+            return $q->where('employee_id', $employee->id);
+        })
         ->leftJoin('employees', 'employees.id', '=', 'myavailabilities.employee_id')
         ->select('myavailabilities.*', 'employees.fname', 'employees.mname', 'employees.lname', 'employees.image')
         ->orderBy('myavailabilities.employee_id', 'asc')
