@@ -44,6 +44,43 @@ class UnavailabilityController extends Controller
         return send_response(true, '', $data);
     }
 
+    public function index_total(Request $request) {
+        $total_employee = DB::table('myavailabilities')
+            ->select(DB::raw(
+                'e.id,e.fname,e.mname,e.lname,
+        sum(myavailabilities.total) as total_day'
+            ))
+            ->leftJoin('employees as e', 'e.id', 'myavailabilities.employee_id')
+            ->where([
+                ['myavailabilities.status', 'approved'],
+                ['myavailabilities.company_code', Auth::user()->company_roles->first()->company->id],
+                // ['myavailabilities.start_date', '>=', $start_date],
+                // // ['myavailabilities.end_date', '<=', $end_date],
+                // ['myavailabilities.start_date', '<=', $end_date],
+                ['myavailabilities.is_leave', 0]
+            ])
+            ->groupBy("e.id")
+            ->orderBy('fname','asc')
+            ->get();
+
+        foreach ($total_employee as $key => $item) {
+            $list = Myavailability::where([
+                ['employee_id', $item->id],
+                ['company_code', Auth::user()->company_roles->first()->company->id],
+                // ['start_date', '>=', Carbon::parse($start_date)->toDateString()],
+                // // ['end_date', '<=', Carbon::parse($end_date)->toDateString()],
+                // ['start_date', '<=', Carbon::parse($end_date)->toDateString()],
+                ['status', '>=', 'approved'],
+            ])
+                ->orderBy('start_date', 'desc')
+                ->get();
+
+            $item->availabilities = $list;
+        }
+
+        return send_response(true, '', $total_employee);
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [

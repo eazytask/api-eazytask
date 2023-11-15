@@ -121,6 +121,7 @@ Route::prefix('v1')->group(function () {
         Route::prefix('admin')->group(function () {
             #my availability
             Route::get('employee/unavailability', [UnavailabilityController::class, 'index']);
+            Route::get('employee/unavailability/total', [UnavailabilityController::class, 'index_total']);
             Route::post('employee/unavailability', [UnavailabilityController::class, 'store']);
             Route::put('employee/unavailability', [UnavailabilityController::class, 'update']);
             Route::delete('employee/unavailability/{id}', [UnavailabilityController::class, 'destroy']);
