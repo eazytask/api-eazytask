@@ -90,7 +90,7 @@ class UnavailabilityController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id' => 'required',
-            'employee_id' => 'required',
+            // 'employee_id' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
             'leave_type_id' => 'required',
@@ -101,13 +101,13 @@ class UnavailabilityController extends Controller
         try {
             $single = Myavailability::find($request->id);
             if ($single) {
-                $single->employee_id = $request->employee_id;
+                $single->employee_id = $request->employee_id ?? $single->employee_id;
                 $single->remarks = $request->remarks;
                 $single->start_date = Carbon::parse($request->start_date);
                 $single->end_date = Carbon::parse($request->end_date);
                 $single->leave_type_id = $request->leave_type_id;
                 $single->total = $single->start_date->floatDiffInRealDays($single->end_date) + 1;
-                $single->status = $request->status;
+                $single->status = $request->status ?? $single->status;
 
                 $single->save();
             }
