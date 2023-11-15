@@ -21,7 +21,7 @@ class UnavailabilityController extends Controller
 
         $employee = null;
         if ($user->current_role > 2) {
-            $employee = DB::table('employees')->where('userID', Auth::user()->id)->where('company', $user->company_roles->first()->company->id)->first();
+            $employee = DB::table('employees')->where('userID', Auth::user()->id)->where('company', $user->company_roles->sortByDesc('last_login')->first()->role)->first();
         }
 
         $data = Myavailability::where([
