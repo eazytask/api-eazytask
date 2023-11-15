@@ -47,7 +47,7 @@ class UnavailabilityController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'employee_id' => 'required',
+            // 'employee_id' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
             'leave_type_id' => 'required',
@@ -55,16 +55,29 @@ class UnavailabilityController extends Controller
         if ($validator->fails())
             return send_response(false, 'validation error!', $validator->errors(), 400);
 
+        $user = Auth::user();
+
+        $employee = $request->employee_id ?? null;
+        $status = $request->status ?? null;
+        $current_role = $user->company_roles->sortByDesc('last_login')->first()->role;
+        $current_company = $user->company_roles->first()->company->id;
+
+        if ($current_role > 2) {
+            $employee = DB::table('employees')->where('userID', Auth::user()->id)->where('company', $current_company)->first()->id;
+            $status = 'pending';
+        }
+    
         try {
             $single = new Myavailability();
             $single->user_id = Auth::id();;
-            $single->employee_id = $request->employee_id;
+            $single->employee_id = $employee;
             $single->company_code = Auth::user()->company_roles->first()->company->id;
             $single->remarks = $request->remarks;
             $single->start_date = Carbon::parse($request->start_date);
             $single->end_date = Carbon::parse($request->end_date);
             $single->leave_type_id = $request->leave_type_id;
             $single->total = $single->start_date->floatDiffInRealDays($single->end_date) + 1;
+            $single->status = $status;
             $single->save();
 
             return send_response(true, 'availability added successfully', new UnavailabilityResource($single));

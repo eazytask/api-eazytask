@@ -27,20 +27,7 @@ class EmployeeController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
-
-        $employee = null;
-        $current_role = $user->company_roles->sortByDesc('last_login')->first()->role;
-        $current_company = $user->company_roles->first()->company->id;
-
-        if ($current_role > 2) {
-            $employee = DB::table('employees')->where('userID', Auth::user()->id)->where('company', $current_company)->first();
-        }
-
-        $employees = Employee::where('company', Auth::user()->company_roles->first()->company->id)
-        ->when($employee != null, function($q) use ($employee) {
-            return $q->where('id', $employee->id);
-        })->orderBy('fname', 'asc')->get();
+        $employees = Employee::where('company', Auth::user()->company_roles->first()->company->id)->orderBy('fname', 'asc')->get();
         return send_response(true, '', EmployeeResource::collection($employees));
     }
 
