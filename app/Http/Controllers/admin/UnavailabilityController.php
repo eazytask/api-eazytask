@@ -45,6 +45,16 @@ class UnavailabilityController extends Controller
     }
 
     public function index_total(Request $request) {
+        $user = Auth::user();
+
+        $employee = null;
+        $current_role = $user->company_roles->sortByDesc('last_login')->first()->role;
+        $current_company = $user->company_roles->first()->company->id;
+
+        if ($current_role > 2) {
+            $employee = DB::table('employees')->where('userID', Auth::user()->id)->where('company', $current_company)->first();
+        }
+
         $total_employee = DB::table('myavailabilities')
             ->select(DB::raw(
                 'e.id,e.fname,e.mname,e.lname,
@@ -59,6 +69,9 @@ class UnavailabilityController extends Controller
                 // ['myavailabilities.start_date', '<=', $end_date],
                 // ['myavailabilities.is_leave', 0]
             ])
+            ->when($employee != null, function($q) use ($employee) {
+                return $q->where('employee_id', $employee->id);
+            })
             ->groupBy("e.id")
             ->orderBy('fname','asc')
             ->get();
