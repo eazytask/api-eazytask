@@ -36,6 +36,8 @@ class FirebaseShiftNotificationJob implements ShouldQueue
     public function handle()
     {
         $timekeeper = TimeKeeper::find($this->timekeeper_id);
+        $title = '';
+        $msg = '';
         if ($timekeeper) {
             $ext = Carbon::parse($timekeeper->roaster_date)->format('d-m-Y').'('.Carbon::parse($timekeeper->shift_start)->format('H:i').'-'.Carbon::parse($timekeeper->shift_end)->format('H:i').')'.' @'.$timekeeper->project->pName;
             if ($timekeeper->shift_end <= Carbon::now()->subMinutes(15) && $timekeeper->sing_in != null && $timekeeper->sing_out == null) {
