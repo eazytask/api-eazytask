@@ -19,7 +19,7 @@ class IsUser
     {
         // dd(auth()->user());
         if(auth()->user()){
-            if (auth()->user()->company_roles->contains('role',3)) {
+            if (auth()->user()->company_roles->contains('role',3) || auth()->user()->company_roles->contains('role',4)) {
                 return $next($request);
             }else{
                 return send_response(false,"You don't have this access",[],401);
