@@ -101,9 +101,9 @@ class AuthController extends Controller
         if($active_company_roles->first()->role == 3){
             $data['user']->mname  = Auth::user()->employee->mname;
             $data['user']->lname  = Auth::user()->employee->lname;
-        }elseif($active_company_roles->first()->role == 4){
-            $data['user']->mname  = Auth::user()->supervisor->mname;
-            $data['user']->lname  = Auth::user()->supervisor->lname;
+        // }elseif($active_company_roles->first()->role == 4){
+        //     $data['user']->mname  = Auth::user()->supervisor->mname;
+        //     $data['user']->lname  = Auth::user()->supervisor->lname;
         }else{
             $data['user']->mname  = Auth::user()->company->mname;
             $data['user']->lname  = Auth::user()->company->lname;
