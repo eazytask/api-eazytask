@@ -71,7 +71,7 @@ class SwitchCompanyController extends Controller
     public function switch_role($switch_role)
     {
         try {
-            $all_roles = auth()->user()->user_roles;dd($all_roles);
+            $all_roles = auth()->user()->user_roles;
             foreach ($all_roles as $role) {
                 $role->last_login = $role->id  == $switch_role ? 1 : 0;
                 $role->save();
