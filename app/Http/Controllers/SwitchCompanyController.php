@@ -46,7 +46,7 @@ class SwitchCompanyController extends Controller
     public function switch($company_id)
     {
         try {
-            $company = Company::find($company_id);dd($company);
+            $company = Company::find($company_id);
             if ($company) {
                 $all_roles = auth()->user()->user_roles;
                 $define_last = true;
@@ -71,7 +71,7 @@ class SwitchCompanyController extends Controller
     public function switch_role($switch_role)
     {
         try {
-            $all_roles = auth()->user()->user_roles;
+            $all_roles = auth()->user()->user_roles;dd($all_roles);
             foreach ($all_roles as $role) {
                 $role->last_login = $role->id  == $switch_role ? 1 : 0;
                 $role->save();
