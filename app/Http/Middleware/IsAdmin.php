@@ -16,7 +16,6 @@ class IsAdmin
     public function handle($request, Closure $next)
     {
         if (auth()->user() && !auth()->user()->company_roles->first()->company->sub_domain) {
-            dd(auth()->user()->company_roles);
             if (auth()->user()->company_roles->contains('role',2) || auth()->user()->company_roles->contains('role',5) || auth()->user()->company_roles->contains('role',4)) {
                 return $next($request);
             }
