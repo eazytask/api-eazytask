@@ -79,8 +79,11 @@ class ProfileController extends Controller
         $user->email = Auth::user()->email;
         $user->pin = Auth::user()->pin;
         $user->current_company = Auth::user()->company_roles->sortByDesc('last_login')->first()->company->id;
+        
         $user->current_company_code = Auth::user()->company_roles->sortByDesc('last_login')->first()->company->company_code;
+
         $user->current_role_id  = Auth::user()->company_roles->sortByDesc('last_login')->first()->id;
+
         $user->current_role  = Auth::user()->company_roles->sortByDesc('last_login')->first()->role;
         $user->roles  = $all_roles;
         
