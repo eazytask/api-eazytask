@@ -20,13 +20,16 @@ class MessagesController extends Controller
     public function index()
     {
         try {
-            $projects = Project::where('company_code', Auth::user()->company_roles->first()->company->id)->orderBy('pName', 'asc')->get()->pluck('id')->toArray();
+            $projects = Project::where('company_code', Auth::user()->company_roles->first()->company->id)->orderBy('pName', 'asc')->get();
             
+            $id_projects = clone $projects;
+            $id_projects = $id_projects->pluck('id')->toArray();
+
             $messages = Message::with('replies', 'confirms')->orderBy('created_at', 'DESC')->get();
             foreach ($messages as $key => $message) {
                 if (empty(array_diff($message->list_venue, ["all"]))) {
                     // Thats all
-                }elseif(!empty(array_diff($message->list_venue, $projects))) {
+                }elseif(!empty(array_diff($message->list_venue, $id_projects))) {
                     unset($messages[$key]);
                 }
                 // Access message properties
