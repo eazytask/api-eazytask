@@ -84,7 +84,7 @@ class User extends Authenticatable
     public function company_roles()
     {
         return $this->hasMany('App\Models\UserRole')
-            // ->where('company_code', auth()->user()->user_roles->unique('company_code')->sortByDesc('last_login')->first()->company_code)
+            ->where('company_code', auth()->user()->user_roles->unique('company_code')->sortByDesc('last_login')->first()->company_code)
             ->orderBy('role', 'asc');
     }
 
