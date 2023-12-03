@@ -20,7 +20,7 @@ class MessagesController extends Controller
     public function index()
     {
         try {
-            $projects = Project::where('company_code', Auth::user()->company_roles->first()->company->id)->orderBy('pName', 'asc')->get();
+            $projects = Project::where('company_code', auth()->user()->user_roles->sortByDesc('last_login')->first()->company_code)->orderBy('pName', 'asc')->get();
             
             $id_projects = clone $projects;
             $id_projects = $id_projects->pluck('id')->toArray();
