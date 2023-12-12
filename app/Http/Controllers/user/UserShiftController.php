@@ -21,7 +21,7 @@ class UserShiftController extends Controller
             ['company_code', Auth::user()->employee->company],
             ['roaster_status_id', roaster_status('Published')],
             ['shift_end', '>=', Carbon::now()],
-            ['roaster_type', 'Schedueled'],
+            // ['roaster_type', 'Schedueled'],
         ])
             ->orderBy('roaster_date', 'asc')
             ->get();
