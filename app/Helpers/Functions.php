@@ -78,14 +78,17 @@ function send_response($status, $message = '', $data = [],$status_code=200)
 # get roster status
 function roaster_status($name)
 {
-    $roaster_status = RoasterStatus::orderBy('id', 'ASC')
-    ->groupBy('name')
-    ->where([
-        ['company_code', Auth::user()->company_roles->first()->company->id],
-        ['name',$name]
-    ])
-    ->first();
-    return $roaster_status->id;
+    if(!empty(Auth::user()))
+    {
+        $roaster_status = RoasterStatus::orderBy('id', 'ASC')
+        ->groupBy('name')
+        ->where([
+            ['company_code', Auth::user()->company_roles->first()->company->id],
+            ['name',$name]
+        ])
+        ->first();
+        return $roaster_status->id;
+    }
 }
 
 #firebase token message 
