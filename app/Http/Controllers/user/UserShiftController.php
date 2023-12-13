@@ -80,7 +80,7 @@ class UserShiftController extends Controller
                 ['employee_id', Auth::user()->employee->id],
                 ['company_code', Auth::user()->employee->company],
                 ['roaster_status_id', roaster_status('Accepted')],
-                ['roaster_type', 'Schedueled'],
+                // ['roaster_type', 'Schedueled'],
                 ['shift_end', '>=', Carbon::now()],
                 ['sing_in', null]
             ])
