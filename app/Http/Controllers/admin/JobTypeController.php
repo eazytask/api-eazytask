@@ -12,7 +12,10 @@ class JobTypeController extends Controller
 {
     public function index()
     {
-        $data = JobType::where('company_code', Auth::user()->company_roles->first()->company->id)->get();
+        $data = JobType::where('company_code', Auth::user()->company_roles->first()->company->id)
+        ->orderBy('id', 'ASC')
+        ->groupBy('name')
+        ->get();
         return send_response(true, '', $data);
     }
 
