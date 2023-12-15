@@ -46,7 +46,8 @@ class User extends Authenticatable
     ];
 
     protected $appends = [
-        'company'
+        'company',
+        'mname',
     ];
 
     /**
@@ -96,6 +97,11 @@ class User extends Authenticatable
             
         $item = Company::where('id', auth()->user()->company_roles->first()->company_code)->first();    
         return $item;
+    }
+
+    public function getMnameAttribute($value)
+    {
+        return $this->mname ?? "";
     }
 
 
