@@ -16,7 +16,10 @@ class BasicController extends Controller
     public function job_type(){
         $job_types = JobType::where([
             ['company_code',auth()->user()->company_roles->first()->company->id]
-        ])->get();
+        ])
+        ->orderBy('id', 'ASC')
+        ->groupBy('name')
+        ->get();
         
         return send_response(true, '', $job_types);
     }
