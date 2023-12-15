@@ -19,7 +19,22 @@ class Message extends Model
 
     public function getFullnameAttribute()
     {
-        return $this->user->name.' '.$this->user->mname.' '.$this->user->lname;
+        // Create an array with all name parts
+        $nameParts = [
+            $this->user->name,
+            $this->user->mname,
+            $this->user->lname,
+        ];
+
+        // Use array_filter to remove null values
+        $filteredNameParts = array_filter($nameParts, function ($part) {
+            return $part !== null;
+        });
+
+        // Concatenate the filtered name parts with a space
+        $fullName = implode(' ', $filteredNameParts);
+
+        return $fullName;
     }
 
     public function getListVenue()
