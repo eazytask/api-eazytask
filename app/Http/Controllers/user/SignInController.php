@@ -23,7 +23,7 @@ class SignInController extends Controller
     {
         $roaster = TimeKeeper::where([
             ['employee_id', Auth::user()->employee->id],
-            ['company_code', Auth::user()->employee->company],
+            ['company_code', Auth::user()->company_roles->first()->company->id],
             ['sing_out', null],
         ])->where(function ($q) {
             $q->where('roaster_type','Schedueled');
