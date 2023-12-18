@@ -33,7 +33,7 @@ class SignInController extends Controller
                 $q->where('sing_in', '!=', null);
             });
         })->where(function ($q) {
-            $q->where('sing_in', '!=', null);
+            // $q->where('sing_in', '!=', null);
             $q->orWhere(function ($q) {
                 // $q->where('shift_end', '>', Carbon::now());
             });
