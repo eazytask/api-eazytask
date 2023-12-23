@@ -42,7 +42,9 @@ class BasicController extends Controller
         $projects = Project::where([
             ['company_code',auth()->user()->company_roles->first()->company->id],
             $filter_status
-        ])->get();
+        ])
+        ->orderBy('pName', 'ASC')
+        ->get();
         
         return send_response(true, '', $projects);
     }

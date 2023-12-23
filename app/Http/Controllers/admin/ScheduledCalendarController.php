@@ -363,7 +363,9 @@ class ScheduledCalendarController extends Controller
         $projects = Project::where([
             ['company_code', auth()->user()->company_roles->first()->company->id],
             ['status', 1]
-        ])->get();
+        ])
+        ->orderBy('pName', 'ASC')
+        ->get();
         
         $filter_project = $request->project == 999 ? ['project_id', '>', 0] : ['project_id', $request->project];
 
