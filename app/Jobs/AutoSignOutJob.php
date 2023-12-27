@@ -36,7 +36,7 @@ class AutoSignOutJob implements ShouldQueue
      */
     public function handle()
     {
-        $signIn = new SignInController;
-        $signIn->addSignOut($this->timekeeper_id);
+        // $signIn = new SignInController;
+        // $signIn->addSignOut($this->timekeeper_id);
     }
 }
