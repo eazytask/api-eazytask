@@ -387,6 +387,9 @@ class ScheduledCalendarController extends Controller
             // $filter_roster_type,
             $filter_project
         ])->whereBetween('time_keepers.roaster_date', [$start_date, $end_date])
+        ->whereIn('time_keepers.roaster_status_id'. [
+            roaster_status('Accepted'), roaster_status('Published')
+        ])
          ->with([
             'job_type' => function($q) {
                 $q->select('id', 'name');
