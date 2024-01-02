@@ -74,6 +74,41 @@ class SignInController extends Controller
             return send_response(false, 'validation error!', $validator->errors(), 400);
 
         try {
+            TimeKeeper::where([
+                ['employee_id', Auth::user()->employee->id],
+                ['company_code', Auth::user()->company_roles->first()->company->id],
+                ['sing_out', null],
+            ])->where(function ($q) {
+                $q->where('roaster_type','Schedueled');
+                $q->where('roaster_status_id',roaster_status('Accepted'));
+                $q->orWhere(function ($q) {
+                    $q->where('roaster_type','Unschedueled');
+                    $q->where('sing_in', '!=', null);
+                });
+            })->where(function ($q) {
+                // $q->where('sing_in', '!=', null);
+                // $q->orWhere(function ($q) {
+                //     $q->where('shift_end', '>', Carbon::now());
+                // });
+            })->where(function ($q) {
+                // $q->where('roaster_date', Carbon::now()->format("Y-m-d"));
+                
+                // $twoDaysAgo = Carbon::now()->subDays(2)->format("Y-m-d");
+                
+                // $today = Carbon::now()->format("Y-m-d");
+                
+                // $q->whereBetween('roaster_date', [$twoDaysAgo, $today]);
+    
+                // $q->orWhere(function ($q) {
+                //     $q->where('roaster_date', Carbon::now()->subDay()->format("Y-m-d"));
+                    // $q->where('shift_end', '>', Carbon::now()->format("Y-m-d"));
+                // });
+            })
+                ->orderBy('shift_start', 'asc')
+                ->update([
+                    'sing_out' => Carbon::now()
+                ]);
+
             $roster = TimeKeeper::find($request->timekeeper_id);
             $roster->sing_in = Carbon::now();
             $roster->signin_comment = $request->comment ?? null;
