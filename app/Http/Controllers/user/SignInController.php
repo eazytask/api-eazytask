@@ -74,7 +74,8 @@ class SignInController extends Controller
             return send_response(false, 'validation error!', $validator->errors(), 400);
 
         try {
-            TimeKeeper::where([
+            TimeKeeper::where('id', '!=', $request->timekeeper_id)
+            ->where([
                 ['employee_id', Auth::user()->employee->id],
                 ['company_code', Auth::user()->company_roles->first()->company->id],
                 ['sing_out', null],
