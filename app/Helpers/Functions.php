@@ -106,6 +106,7 @@ function sendFirebasePushNotification($notiSubject,$notiBody,$role,$tokens,$type
             "notification" => [
                 "title" => $notiSubject,
                 "body" => $notiBody,
+                "sound" => "default"
             ],
             "data" => [
                 "role" => $role->id,
