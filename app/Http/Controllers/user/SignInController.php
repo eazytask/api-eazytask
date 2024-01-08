@@ -88,9 +88,9 @@ class SignInController extends Controller
                     $q->where('sing_in', '!=', null);
                 });
             })->where(function ($q) {
+                $q->where('shift_end', '>', Carbon::now());
                 // $q->where('sing_in', '!=', null);
                 // $q->orWhere(function ($q) {
-                //     $q->where('shift_end', '>', Carbon::now());
                 // });
             })->where(function ($q) {
                 // $q->where('roaster_date', Carbon::now()->format("Y-m-d"));
