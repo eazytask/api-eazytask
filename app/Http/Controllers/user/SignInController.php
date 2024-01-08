@@ -79,6 +79,7 @@ class SignInController extends Controller
                 ['employee_id', Auth::user()->employee->id],
                 ['company_code', Auth::user()->company_roles->first()->company->id],
                 ['sing_out', null],
+                ['sing_in', '!=', null],
             ])->where(function ($q) {
                 $q->where('roaster_type','Schedueled');
                 $q->where('roaster_status_id',roaster_status('Accepted'));
