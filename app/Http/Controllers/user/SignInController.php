@@ -251,14 +251,14 @@ class SignInController extends Controller
         }
     }
 
-    public function addSignOut($timekeeper_id)
+    public function addSignOut($timekeeper_id, $auto = false)
     {
         Log::alert($timekeeper_id);
 
         $roster = TimeKeeper::find($timekeeper_id);
 
         if (!$roster->sing_out) {
-            $roster->sing_out = Carbon::now();
+            $roster->sing_out = $auto ? $roster->shift_end : Carbon::now();
             $roster->signout_comment = request()->comment ?? null;
 
             if ($roster->roaster_type == 'Unschedueled') {
