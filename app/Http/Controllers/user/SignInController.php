@@ -33,6 +33,10 @@ class SignInController extends Controller
                 $q->where('sing_in', '!=', null);
             });
         })->where(function ($q) {
+            $q->where(function ($q) {
+                $q->where('sing_in', '!=', null)
+                    ->orWhere('shift_end', '>', Carbon::now());
+            });
             // $q->where('sing_in', '!=', null);
             // $q->orWhere(function ($q) {
             //     $q->where('shift_end', '>', Carbon::now());
@@ -41,25 +45,37 @@ class SignInController extends Controller
             // $q->where('shift_end', '>', Carbon::now());
             // $q->orWhere('sing_in', '!=', null);
         })->where(function ($q) {
-            // $q->where('roaster_date', Carbon::now()->format("Y-m-d"));
+            $q->where('roaster_date', Carbon::now()->format("Y-m-d"));
             
-            $twoDaysAgo = Carbon::now()->subDays(2)->format("Y-m-d");
+            // $twoDaysAgo = Carbon::now()->subDays(2)->format("Y-m-d");
             
-            $today = Carbon::now()->format("Y-m-d");
+            // $today = Carbon::now()->format("Y-m-d");
             
-            $q->whereBetween('roaster_date', [$twoDaysAgo, $today]);
+            // $q->whereBetween('roaster_date', [$twoDaysAgo, $today]);
 
             // $q->orWhere(function ($q) {
             //     $q->where('roaster_date', Carbon::now()->subDay()->format("Y-m-d"));
                 // $q->where('shift_end', '>', Carbon::now()->format("Y-m-d"));
             // });
         })
-            ->orderBy('shift_start', 'asc')->first();
-
+        ->orderBy('shift_start', 'asc')->get();
+        
+        $final_roaster = null;
+        if (count($roaster) > 1) {
+            foreach($roaster as $item) {
+                if($item->shift_end > Carbon::now() && $item->sing_in == null) {
+                    $final_roaster = $item;
+                    break;
+                }
+            }
+        }else{
+            $final_roaster = $roaster[0] ?? null;
+        }
+        
         $data = [];
 
-        if ($roaster) {
-            $data[0] = new UserTimekeeperResource($roaster);
+        if ($final_roaster) {
+            $data[0] = new UserTimekeeperResource($final_roaster);
         }
         return send_response(true, '', $data);
     }
