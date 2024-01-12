@@ -60,7 +60,7 @@ class SignInController extends Controller
         })
         ->orderBy('shift_start', 'asc')->get();
         
-        $final_roaster = null;dd($roaster);
+        $final_roaster = null;
         if (count($roaster) > 1) {
             foreach($roaster as $item) {
                 if($item->shift_end > Carbon::now() && $item->sign_in != null) {
