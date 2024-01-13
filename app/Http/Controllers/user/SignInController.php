@@ -63,11 +63,10 @@ class SignInController extends Controller
         $final_roaster = null;
         if (count($roaster) > 1) {
             foreach($roaster as $item) {
-                if($item->shift_end > Carbon::now() && $item->sing_in != null) {
+                if($item->sing_in != null) {
                     $final_roaster = $item;
-                    break;
                 }
-                if($item->shift_end > Carbon::now() && $item->sing_in == null) {
+                if($item->shift_end > Carbon::now() && $item->sing_in == null && $item->shift_start <= Carbon::now()->addMinutes(15)) {
                     $final_roaster = $item;
                     break;
                 }
