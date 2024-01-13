@@ -397,7 +397,7 @@ class ScheduledCalendarController extends Controller
             ->orderBy('time_keepers.shift_start','ASC')
             ->join('roaster_statuses', 'time_keepers.roaster_status_id', '=', 'roaster_statuses.id')
             ->leftJoin('employees as e', 'e.id', 'time_keepers.employee_id')
-                ->get(['roaster_statuses.color', 'time_keepers.*', DB::raw('CONCAT_WS(" ", e.fname, e.mname, e.lname) AS employee_name')]);
+            ->get(['roaster_statuses.color', 'time_keepers.*', DB::raw('CONCAT_WS(" ", e.fname, e.mname, e.lname) AS employee_name')]);
         
  
 
