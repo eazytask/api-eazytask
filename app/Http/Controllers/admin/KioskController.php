@@ -153,10 +153,10 @@ class KioskController extends Controller
                         $final_roaster = $roaster[0] ?? null;
                     }
                     
-                    $data = [];
+                    $data = null;
             
                     if ($final_roaster) {
-                        $data[0] = new UserTimekeeperResource($final_roaster);
+                        $data = new UserTimekeeperResource($final_roaster);
                     }
 
                     return send_response(true, '', $data);
