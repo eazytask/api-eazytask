@@ -124,15 +124,42 @@ class KioskController extends Controller
                         });
                     })->where(function ($q) {
                         $q->where('roaster_date', Carbon::now()->format("Y-m-d"));
-                        $q->orWhere(function ($q) {
-                            $q->where('roaster_date', Carbon::now()->subDay()->format("Y-m-d"));
-                            $q->where('shift_end', '>', Carbon::now()->format("Y-m-d"));
-                        });
+                        // $q->orWhere(function ($q) {
+                        //     $q->where('roaster_date', Carbon::now()->subDay()->format("Y-m-d"));
+                        //     $q->where('shift_end', '>', Carbon::now()->format("Y-m-d"));
+                        // });
                     })
                         ->orderBy('shift_start', 'asc')
-                        ->first();
+                        ->get();
 
-                    return send_response(true, '', $roaster ? new UserTimekeeperResource($roaster) : null);
+                    $final_roaster = null;
+                    if (count($roaster) > 1) {
+                        foreach($roaster as $index => $item) {
+                            if($item->sing_in != null) {
+                                $final_roaster = $item;
+                            }
+                            if($item->shift_end > Carbon::now() && $item->sing_in == null && $item->shift_start <= Carbon::now()->addMinutes(15)) {
+                                if(!empty($roaster[$index-1])) {
+                                    if($roaster[$index-1]->sing_out == null) {
+                                        $roaster[$index-1]->sing_out = $roaster[$index-1]->shift_end;
+                                        $roaster[$index-1]->save();
+                                    }
+                                }
+                                $final_roaster = $item;
+                                break;
+                            }
+                        }
+                    }else{
+                        $final_roaster = $roaster[0] ?? null;
+                    }
+                    
+                    $data = [];
+            
+                    if ($final_roaster) {
+                        $data[0] = new UserTimekeeperResource($final_roaster);
+                    }
+
+                    return send_response(true, '', $data);
                 } else {
                     return send_response(false, "wrong pin!", [], 400);
                 }
