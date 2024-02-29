@@ -125,7 +125,7 @@ Route::prefix('v1')->group(function () {
             Route::post('employee/unavailability', [UnavailabilityController::class, 'store']);
             Route::put('employee/unavailability', [UnavailabilityController::class, 'update']);
             Route::delete('employee/unavailability/{id}', [UnavailabilityController::class, 'destroy']);
-            
+            Route::get('employee/shift-details', [EmployeeController::class, 'employee_shift_details']);
             Route::middleware(['is_admin'])->group(function () {
 
                 #event

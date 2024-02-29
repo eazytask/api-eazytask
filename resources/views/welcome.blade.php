@@ -329,6 +329,12 @@
                                     </td>
                                     <td>fetch all compliances type</td>
                                 </tr>
+                                <tr>
+                                    <th>Get</th>
+                                    <td>/admin/employee/shift-details</td>
+                                    <td>{ }</td>
+                                    <td>Fetch All Shift Details with employee, client and project details</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
