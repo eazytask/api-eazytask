@@ -451,4 +451,17 @@ class EmployeeController extends Controller
             'data'=> $shift_details
         ]);
     }
+    public function employee_shift_details_by_id($employee_id){
+        $shift_details = TimeKeeper::leftjoin('companies', 'companies.id', 'time_keepers.company_code')
+        ->leftjoin('employees', 'employees.id', 'time_keepers.employee_id')
+        ->leftjoin('clients', 'clients.id', 'time_keepers.client_id')
+        ->leftjoin('projects', 'projects.id', 'time_keepers.project_id')
+        ->where('time_keepers.employee_id', $employee_id)
+        ->select('time_keepers.id as report_id', 'time_keepers.*', 'employees.*', 'companies.*', 'clients.*', 'projects.*')
+        ->get();
+        return response()->json([
+            'status'=> true,
+            'data'=> $shift_details
+        ]);
+    }
 }

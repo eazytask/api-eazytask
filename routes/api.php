@@ -126,6 +126,7 @@ Route::prefix('v1')->group(function () {
             Route::put('employee/unavailability', [UnavailabilityController::class, 'update']);
             Route::delete('employee/unavailability/{id}', [UnavailabilityController::class, 'destroy']);
             Route::get('employee/shift-details', [EmployeeController::class, 'employee_shift_details']);
+            Route::get('employee/shift-details/{employee_id}', [EmployeeController::class, 'employee_shift_details_by_id']);
             Route::middleware(['is_admin'])->group(function () {
 
                 #event

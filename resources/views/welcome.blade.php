@@ -335,6 +335,12 @@
                                     <td>{ }</td>
                                     <td>Fetch All Shift Details with employee, client and project details</td>
                                 </tr>
+                                <tr>
+                                    <th>Get</th>
+                                    <td>employee/shift-details/{employee_id}</td>
+                                    <td>{ }</td>
+                                    <td>Fetch All Shift Details of single employee with client and project details</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
