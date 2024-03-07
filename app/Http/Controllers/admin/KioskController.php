@@ -8,6 +8,7 @@ use App\Http\Resources\admin\EmployeeResource;
 use App\Http\Resources\user\UserTimekeeperResource;
 use App\Jobs\AutoSignOutJob;
 use App\Models\Employee;
+use App\Models\Inductedsite;
 use App\Models\Project;
 use App\Models\TimeKeeper;
 use App\Models\User;
@@ -32,10 +33,7 @@ class KioskController extends Controller
         $project = Project::find($request->project_id);
         if ($project) {
             if ($request->employee_filter == 'shift') {
-                $employees = DB::table('time_keepers')
-                    ->select(DB::raw(
-                        'e.*'
-                    ))
+                $employees = TimeKeeper::select('e.*', 'time_keepers.*')
                     ->leftJoin('employees as e', 'e.id', 'time_keepers.employee_id')
                     ->where([
                         ['e.company', Auth::user()->company_roles->first()->company->id],
@@ -53,10 +51,13 @@ class KioskController extends Controller
                         ['roaster_status_id', roaster_status('Accepted')]
                     ])
                     ->get();
+            }elseif($request->employee_filter == 'shift_details'){
+                $employees = Employee::where('employees.company', Auth::user()->company_roles->first()->company->id)
+                ->with('shiftDetails')->get();
+                return send_response(true, 'Employees fetched successfully', $employees, 200);
             }
             elseif ($request->employee_filter == 'inducted') {
-                $employees = DB::table('inductedsites')
-                    ->select(DB::raw(
+                $employees = Inductedsite::select(DB::raw(
                         'e.*'
                     ))
                     ->leftJoin('employees as e', 'e.id', 'inductedsites.employee_id')

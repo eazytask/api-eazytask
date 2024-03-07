@@ -53,7 +53,10 @@ class Employee extends Model
     return $this->belongsTo('App\Models\UserRole', 'userID', 'user_id')
       ->where('role', 3);
   }
-  
+  public function shiftDetails()
+  {
+    return $this->hasMany(TimeKeeper::class, 'employee_id');
+  }
   public function admin()
   {
     return $this->belongsTo('App\Models\User', 'user_id', 'id');
