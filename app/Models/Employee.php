@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -55,7 +56,8 @@ class Employee extends Model
   }
   public function shiftDetails()
   {
-    return $this->hasMany(TimeKeeper::class, 'employee_id');
+    $current_date = Carbon::now()->format('Y-m-d');
+    return $this->hasMany(TimeKeeper::class, 'employee_id')->where('roaster_date', '>=', $current_date)->limit(1);
   }
   public function admin()
   {

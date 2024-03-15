@@ -52,8 +52,12 @@ class KioskController extends Controller
                     ])
                     ->get();
             }elseif($request->employee_filter == 'shift_details'){
-                $employees = Employee::where('employees.company', Auth::user()->company_roles->first()->company->id)
-                ->with('shiftDetails')->get();
+                $employees_query = Employee::where('employees.company', Auth::user()->company_roles->first()->company->id)
+                ->with('shiftDetails');
+                if($request->employee_id){
+                    $employees_query->where('employees.id', $request->employee_id);
+                }
+                $employees = $employees_query->get();
                 return send_response(true, 'Employees fetched successfully', $employees, 200);
             }
             elseif ($request->employee_filter == 'inducted') {
