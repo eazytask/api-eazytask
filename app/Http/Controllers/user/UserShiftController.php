@@ -108,7 +108,7 @@ class UserShiftController extends Controller
             $rosters = TimeKeeper::where([
                 ['employee_id', Auth::user()->employee->id],
                 ['company_code', Auth::user()->employee->company],
-                // ['shift_end', '<=', Carbon::now()],
+                ['shift_end', '<=', Carbon::now()],
             ])
                 ->where(function ($q) {
                     $q->where('sing_in', '!=', null);
@@ -117,9 +117,9 @@ class UserShiftController extends Controller
                         $q->where('shift_end', '<=', Carbon::now());
                     });
                 })
-                ->where(function ($q) {
-                    avoid_rejected_key($q);
-                })
+                // ->where(function ($q) {
+                //     avoid_rejected_key($q);
+                // })
                 ->whereBetween('roaster_date', [$curr_week->startOfWeek()->toDateString(), $curr_week->endOfWeek()->toDateString()])
                 ->orderBy('roaster_date', 'desc')
                 ->get();
