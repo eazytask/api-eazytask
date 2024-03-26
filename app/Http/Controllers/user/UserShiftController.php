@@ -99,6 +99,7 @@ class UserShiftController extends Controller
 
     public function past_shift()
     {
+        $query_date = request()->get('filter_date');
         $data = [];
         $start_date = Carbon::now()->subMonths(2)->startOfMonth()->startOfWeek();
         for ($start_date; $start_date->startOfWeek() != Carbon::now()->addWeeks()->startOfWeek(); $start_date->addWeek()) {
@@ -120,7 +121,12 @@ class UserShiftController extends Controller
                 // ->where(function ($q) {
                 //     avoid_rejected_key($q);
                 // })
-                ->whereBetween('roaster_date', [$curr_week->startOfWeek()->toDateString(), $curr_week->endOfWeek()->toDateString()])
+                ->when(!empty($query_date), function($query) use ($query_date) {
+                    $query->where('roaster_date', 'LIKE', "%$query_date%")
+                })
+                ->when(empty($query_date), function($query) use($curr_week) {
+                    $query->whereBetween('roaster_date', [$curr_week->startOfWeek()->toDateString(), $curr_week->endOfWeek()->toDateString()])
+                })
                 ->orderBy('roaster_date', 'desc')
                 ->get();
 
