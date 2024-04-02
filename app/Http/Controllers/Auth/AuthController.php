@@ -151,7 +151,7 @@ class AuthController extends Controller
         //login prosses-------------------------------------------------
         if (auth()->attempt(array('email' => $input['email'], 'password' => $input['password']))) {
             if (auth()->user()->user_roles->where('role',2)->count() > 0) {
-                if ((auth()->user()->company_roles->first()->role == 2) && auth()->user()->company_roles->first()->company->status == 0) {
+                if ((auth()->user()->company_roles->first()->role == 2) && auth()->user()->company_roles->first()->company->status == 1) {
                     $all_roles = auth()->user()->user_roles->where('role',2)->unique('company_code')->sortByDesc('last_login');
                     $company = null;
                     $c_id = '';
@@ -166,8 +166,8 @@ class AuthController extends Controller
                     if ($company) {
                         return $this->admin_login_response($v_user, $company->id);
                     } else {
-                        // Auth::logout();
-                        // return send_response(false, 'sorry! your company has temporarily blocked!',[],400);
+                        Auth::logout();
+                        return send_response(false, 'sorry! your company has temporarily blocked!',[],400);
                     }
                 } else {
                     $current_company_id = Auth::user()->company_roles->first()->company->id;
