@@ -166,8 +166,8 @@ class AuthController extends Controller
                     if ($company) {
                         return $this->admin_login_response($v_user, $company->id);
                     } else {
-                        Auth::logout();
-                        return send_response(false, 'sorry! your company has temporarily blocked!',[],400);
+                        // Auth::logout();
+                        // return send_response(false, 'sorry! your company has temporarily blocked!',[],400);
                     }
                 } else {
                     $current_company_id = Auth::user()->company_roles->first()->company->id;
