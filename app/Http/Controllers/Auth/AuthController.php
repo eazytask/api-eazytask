@@ -42,7 +42,8 @@ class AuthController extends Controller
         //login prosses-------------------------------------------------
         if (auth()->attempt(array('email' => $input['email'], 'password' => $input['password']))) {
             if (auth()->user()->user_roles->count() > 0) {
-                if ((auth()->user()->company_roles->first()->role != 1) && (auth()->user()->company_roles->first()->company->status == 0 || Carbon::parse(auth()->user()->company_roles->first()->company->expire_date)<Carbon::now()->toDateString())) {
+                if ((auth()->user()->company_roles->first()->role != 1) && (auth()->user()->company_roles->first()->company->status == 0) {
+                    // || Carbon::parse(auth()->user()->company_roles->first()->company->expire_date)<Carbon::now()->toDateString())
                     $all_roles = auth()->user()->user_roles->unique('company_code')->sortByDesc('last_login');
                     $company = null;
                     $c_id = '';
@@ -151,7 +152,7 @@ class AuthController extends Controller
         //login prosses-------------------------------------------------
         if (auth()->attempt(array('email' => $input['email'], 'password' => $input['password']))) {
             if (auth()->user()->user_roles->where('role',2)->count() > 0) {
-                if ((auth()->user()->company_roles->first()->role == 2) && auth()->user()->company_roles->first()->company->status == 0 && false) {
+                if ((auth()->user()->company_roles->first()->role == 2) && auth()->user()->company_roles->first()->company->status == 0) {
                     $all_roles = auth()->user()->user_roles->where('role',2)->unique('company_code')->sortByDesc('last_login');
                     $company = null;
                     $c_id = '';
