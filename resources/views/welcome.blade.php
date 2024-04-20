@@ -747,7 +747,8 @@
                                         "amount": "required",
                                         "roaster_status_id": optional,
                                         "roaster_type": optional,
-                                        "remarks": optional
+                                        "remarks": optional,
+                                        "process": "optional|boolean"
                                         }
                                     </td>
                                     <td>store timekeeper</td>
@@ -769,7 +770,8 @@
                                         "amount": "required",
                                         "roaster_status_id": optional,
                                         "roaster_type": optional,
-                                        "remarks": optional
+                                        "remarks": optional,
+                                        "process": "optional|boolean"
                                         }
                                     </td>
                                     <td>update timekeeper</td>
