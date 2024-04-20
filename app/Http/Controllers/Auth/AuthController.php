@@ -43,20 +43,32 @@ class AuthController extends Controller
         if (auth()->attempt(array('email' => $input['email'], 'password' => $input['password']))) {
             if (auth()->user()->user_roles->count() > 0) {
                 if($request->type == 'user') {
-                    $all_roles = auth()->user()->user_roles->where('role', 3);
+                    $all_roles = auth()->user()->user_roles;
+                    $checked = false;
                     foreach ($all_roles as $role) {
-                        $role->last_login = 1;
-                        $role->save();
-                        break;
+                        if($role->role == 3 && $checked == false) {
+                            $role->last_login = 1;
+                            $role->save();
+                            $checked = true;
+                        }else{
+                            $role->last_login = 0;
+                            $role->save();
+                        }
                     }
                 }
 
                 if($request->type == 'admin') {
-                    $all_roles = auth()->user()->user_roles->where('role', 2);
+                    $all_roles = auth()->user()->user_roles;
+                    $checked = false;
                     foreach ($all_roles as $role) {
-                        $role->last_login = 1;
-                        $role->save();
-                        break;
+                        if($role->role == 2 && $checked == false) {
+                            $role->last_login = 1;
+                            $role->save();
+                            $checked = true;
+                        }else{
+                            $role->last_login = 0;
+                            $role->save();
+                        }
                     }
                 }
 
