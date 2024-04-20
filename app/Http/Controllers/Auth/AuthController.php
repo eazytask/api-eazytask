@@ -42,14 +42,14 @@ class AuthController extends Controller
         //login prosses-------------------------------------------------
         if (auth()->attempt(array('email' => $input['email'], 'password' => $input['password']))) {
             if (auth()->user()->user_roles->count() > 0) {
-                if($request->type == 'user') {
+                // if($request->type == 'user') {
                     $all_roles = auth()->user()->user_roles->where('role', 3);
                     foreach ($all_roles as $role) {
                         $role->last_login = 1;
                         $role->save();
                         break;
                     }
-                }
+                // }
 
                 if($request->type == 'admin') {
                     $all_roles = auth()->user()->user_roles->where('role', 2);
