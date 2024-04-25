@@ -34,6 +34,7 @@ class EmployeeResource extends JsonResource
             'first_aid_license' => $this->first_aid_license,
             'first_aid_expire_date' => $this->first_aid_expire_date,
             'image' => $this->image ? asset($this->image) : "",
+            'shiftDetails'=>$this->shiftDetails
         ];
     }
 }

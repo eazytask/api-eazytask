@@ -64,7 +64,7 @@ class KioskController extends Controller
             elseif ($request->employee_filter == 'inducted') {
                 $employees = Inductedsite::select(DB::raw(
                         'e.*'
-                    ))
+                ))
                     ->leftJoin('employees as e', 'e.id', 'inductedsites.employee_id')
                     ->where([
                         ['e.company', Auth::user()->company_roles->first()->company->id],
@@ -85,14 +85,13 @@ class KioskController extends Controller
                 $employees = Employee::where([
                     ['company', Auth::user()->company_roles->first()->company->id],
                     ['role', 3],
-                    ['status', 1],
-                    ['project_id', $project->id]
+                    ['status', 1]
                 ])
-                    ->where(function ($q) {
-                        avoid_expired_license($q);
-                    })->with('shiftDetails')
-                    ->orderBy('fname', 'asc')
-                    ->get();
+                ->where(function ($q) {
+                    avoid_expired_license($q);
+                })->with('shiftDetails')
+                ->orderBy('fname', 'asc')
+                ->get();
             }
 
             return send_response(true, '', EmployeeResource::collection($employees));

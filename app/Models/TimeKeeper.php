@@ -28,6 +28,9 @@ class TimeKeeper extends Model
     public function employee(){
         return $this->belongsTo('App\Models\Employee','employee_id');
     }
+    public function shiftDetails(){
+        return $this->belongsTo('App\Models\Employee','employee_id')->with('shiftDetails');
+    }
     public function client(){
         return $this->belongsTo('App\Models\Client','client_id');
     }
