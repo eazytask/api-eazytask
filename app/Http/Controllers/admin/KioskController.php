@@ -49,17 +49,18 @@ class KioskController extends Controller
                         ['roaster_date', Carbon::now()->toDateString()],
                         ['project_id', $project->id],
                         ['roaster_status_id', roaster_status('Accepted')]
-                    ])
+                    ])->with('shiftDetails')
                     ->get();
-            }elseif($request->employee_filter == 'shift_details'){
-                $employees_query = Employee::where('employees.company', Auth::user()->company_roles->first()->company->id)
-                ->with('shiftDetails');
-                if($request->employee_id){
-                    $employees_query->where('employees.id', $request->employee_id);
-                }
-                $employees = $employees_query->get();
-                return send_response(true, 'Employees fetched successfully', $employees, 200);
             }
+            // elseif($request->employee_filter == 'shift_details'){
+            //     $employees_query = Employee::where('employees.company', Auth::user()->company_roles->first()->company->id)
+            //     ->with('shiftDetails');
+            //     if($request->employee_id){
+            //         $employees_query->where('employees.id', $request->employee_id);
+            //     }
+            //     $employees = $employees_query->get();
+            //     return send_response(true, 'Employees fetched successfully', $employees, 200);
+            // }
             elseif ($request->employee_filter == 'inducted') {
                 $employees = Inductedsite::select(DB::raw(
                         'e.*'
@@ -78,17 +79,18 @@ class KioskController extends Controller
                     ->where([
                         ['company_code', Auth::user()->company_roles->first()->company->id],
                         ['project_id', $project->id],
-                    ])
+                    ])->with('shiftDetails')
                     ->get();
             } else {
                 $employees = Employee::where([
                     ['company', Auth::user()->company_roles->first()->company->id],
                     ['role', 3],
-                    ['status', 1]
+                    ['status', 1],
+                    ['project_id', $project->id]
                 ])
                     ->where(function ($q) {
                         avoid_expired_license($q);
-                    })
+                    })->with('shiftDetails')
                     ->orderBy('fname', 'asc')
                     ->get();
             }
