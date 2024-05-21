@@ -86,8 +86,7 @@ class KioskController extends Controller
                 $employees = Employee::where([
                     ['company', Auth::user()->company_roles->first()->company->id],
                     ['role', 3],
-                    ['status', 1],
-                    ['project_id', $project->id],
+                    ['status', 1]
                 ])
                 ->where(function ($q) {
                     avoid_expired_license($q);
