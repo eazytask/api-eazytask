@@ -34,17 +34,17 @@ class KioskController extends Controller
         if ($project) {
             if ($request->employee_filter == 'shift') {
                 // return $request->all();
-                $employees = TimeKeeper::select('e.*', 'time_keepers.*', 'e.id as id', 'time_keepers.id as time_keeper_id')
-                    ->leftJoin('employees as e', 'e.id', 'time_keepers.employee_id')
+                $employees = Employee::select('employees.*', 'time_keepers.*', 'employees.id as id', 'time_keepers.id as time_keeper_id')
+                    ->rightJoin('time_keepers', 'time_keepers.employee_id', 'employees.id')
                     ->where([
-                        ['e.company', Auth::user()->company_roles->first()->company->id],
-                        ['e.role', 3],
+                        ['employees.company', Auth::user()->company_roles->first()->company->id],
+                        ['employees.role', 3],
                     ])
                     ->where(function ($q) {
-                        e_avoid_expired_license($q);
+                        avoid_expired_license($q);
                     })
-                    ->groupBy("e.id")
-                    ->orderBy('e.fname', 'asc')
+                    ->groupBy("employees.id")
+                    ->orderBy('employees.fname', 'asc')
                     ->where([
                         ['company_code', Auth::user()->company_roles->first()->company->id],
                         ['roaster_date', Carbon::now()->toDateString()],
