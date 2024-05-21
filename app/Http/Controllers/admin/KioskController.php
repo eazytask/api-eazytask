@@ -33,7 +33,8 @@ class KioskController extends Controller
         $project = Project::find($request->project_id);
         if ($project) {
             if ($request->employee_filter == 'shift') {
-                $employees = TimeKeeper::select('e.*', 'time_keepers.*')
+                // return $request->all();
+                $employees = TimeKeeper::select('e.*', 'time_keepers.*', 'e.id as id', 'time_keepers.id as time_keeper_id')
                     ->leftJoin('employees as e', 'e.id', 'time_keepers.employee_id')
                     ->where([
                         ['e.company', Auth::user()->company_roles->first()->company->id],
@@ -85,7 +86,8 @@ class KioskController extends Controller
                 $employees = Employee::where([
                     ['company', Auth::user()->company_roles->first()->company->id],
                     ['role', 3],
-                    ['status', 1]
+                    ['status', 1],
+                    ['project_id', $project->id],
                 ])
                 ->where(function ($q) {
                     avoid_expired_license($q);
