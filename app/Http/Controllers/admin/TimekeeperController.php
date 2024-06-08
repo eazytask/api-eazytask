@@ -107,7 +107,12 @@ class TimekeeperController extends Controller
                 // } else {
                 $timekeeper->roaster_status_id = roaster_status('Published');
                 // }
-
+                
+                if($request->process){
+                    $timekeeper->process = $request->process;
+                }else{
+                    $timekeeper->process = 0;
+                }
                 if ($request->is_approved) {
                     $timekeeper->is_approved = 1;
                 }
@@ -231,6 +236,12 @@ class TimekeeperController extends Controller
                     $timekeeper->roaster_status_id = roaster_status('Published');
                 }
 
+                if($request->process){
+                    $timekeeper->process = $request->process;
+                }else{
+                    $timekeeper->process = 0;
+                }
+                
                 if ($request->is_approved) {
                     $timekeeper->is_approved = 1;
                 }

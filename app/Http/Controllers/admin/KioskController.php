@@ -33,37 +33,39 @@ class KioskController extends Controller
         $project = Project::find($request->project_id);
         if ($project) {
             if ($request->employee_filter == 'shift') {
-                $employees = TimeKeeper::select('e.*', 'time_keepers.*')
-                    ->leftJoin('employees as e', 'e.id', 'time_keepers.employee_id')
+                // return $request->all();
+                $employees = Employee::select('employees.*', 'time_keepers.*', 'employees.id as id', 'time_keepers.id as time_keeper_id')
+                    ->rightJoin('time_keepers', 'time_keepers.employee_id', 'employees.id')
                     ->where([
-                        ['e.company', Auth::user()->company_roles->first()->company->id],
-                        ['e.role', 3],
+                        ['employees.company', Auth::user()->company_roles->first()->company->id],
+                        ['employees.role', 3],
                     ])
                     ->where(function ($q) {
-                        e_avoid_expired_license($q);
+                        avoid_expired_license($q);
                     })
-                    ->groupBy("e.id")
-                    ->orderBy('e.fname', 'asc')
+                    ->groupBy("employees.id")
+                    ->orderBy('employees.fname', 'asc')
                     ->where([
                         ['company_code', Auth::user()->company_roles->first()->company->id],
                         ['roaster_date', Carbon::now()->toDateString()],
                         ['project_id', $project->id],
                         ['roaster_status_id', roaster_status('Accepted')]
-                    ])
+                    ])->with('shiftDetails')
                     ->get();
-            }elseif($request->employee_filter == 'shift_details'){
-                $employees_query = Employee::where('employees.company', Auth::user()->company_roles->first()->company->id)
-                ->with('shiftDetails');
-                if($request->employee_id){
-                    $employees_query->where('employees.id', $request->employee_id);
-                }
-                $employees = $employees_query->get();
-                return send_response(true, 'Employees fetched successfully', $employees, 200);
             }
+            // elseif($request->employee_filter == 'shift_details'){
+            //     $employees_query = Employee::where('employees.company', Auth::user()->company_roles->first()->company->id)
+            //     ->with('shiftDetails');
+            //     if($request->employee_id){
+            //         $employees_query->where('employees.id', $request->employee_id);
+            //     }
+            //     $employees = $employees_query->get();
+            //     return send_response(true, 'Employees fetched successfully', $employees, 200);
+            // }
             elseif ($request->employee_filter == 'inducted') {
                 $employees = Inductedsite::select(DB::raw(
                         'e.*'
-                    ))
+                ))
                     ->leftJoin('employees as e', 'e.id', 'inductedsites.employee_id')
                     ->where([
                         ['e.company', Auth::user()->company_roles->first()->company->id],
@@ -78,7 +80,7 @@ class KioskController extends Controller
                     ->where([
                         ['company_code', Auth::user()->company_roles->first()->company->id],
                         ['project_id', $project->id],
-                    ])
+                    ])->with('shiftDetails')
                     ->get();
             } else {
                 $employees = Employee::where([
@@ -86,11 +88,11 @@ class KioskController extends Controller
                     ['role', 3],
                     ['status', 1]
                 ])
-                    ->where(function ($q) {
-                        avoid_expired_license($q);
-                    })
-                    ->orderBy('fname', 'asc')
-                    ->get();
+                ->where(function ($q) {
+                    avoid_expired_license($q);
+                })->with('shiftDetails')
+                ->orderBy('fname', 'asc')
+                ->get();
             }
 
             return send_response(true, '', EmployeeResource::collection($employees));
