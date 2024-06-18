@@ -100,6 +100,7 @@ function push_notify($notiSubject,$notiBody,$role,$firebase,$type='',$id=''){
 
 function sendFirebasePushNotification($notiSubject,$notiBody,$role,$tokens,$type='',$id=''){
     $roles=['2'=>'Admin','3'=>'User'];
+    $theRole= $roles[$role->role] ?? 'Admin';
     $url = 'https://fcm.googleapis.com/fcm/send';
         $data = [
             "registration_ids" => $tokens,
@@ -110,7 +111,7 @@ function sendFirebasePushNotification($notiSubject,$notiBody,$role,$tokens,$type
             ],
             "data" => [
                 "role" => $role->id,
-                "company" => strtoupper($role->company->company_code) .'-'. $roles[$role->role],
+                "company" => strtoupper($role->company->company_code) .'-'. $theRole,
                 "type" => $type,
                 "id" => $id,
                 "click_action"=> "FLUTTER_NOTIFICATION_CLICK"
