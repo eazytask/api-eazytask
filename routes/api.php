@@ -119,6 +119,9 @@ Route::prefix('v1')->group(function () {
         
         # all admin routes
         Route::prefix('admin')->group(function () {
+            //for user and admin (new update ui)
+            Route::get('employee', [EmployeeController::class, 'index']);
+            
             #my availability
             Route::get('employee/unavailability', [UnavailabilityController::class, 'index']);
             Route::get('employee/unavailability/total', [UnavailabilityController::class, 'index_total']);
@@ -127,6 +130,7 @@ Route::prefix('v1')->group(function () {
             Route::delete('employee/unavailability/{id}', [UnavailabilityController::class, 'destroy']);
             Route::get('employee/shift-details', [EmployeeController::class, 'employee_shift_details']);
             Route::get('employee/shift-details/{employee_id}', [EmployeeController::class, 'employee_shift_details_by_id']);
+
             Route::middleware(['is_admin'])->group(function () {
 
                 #event
@@ -168,7 +172,6 @@ Route::prefix('v1')->group(function () {
                 // Route::post('timekeeper/search', [TimekeeperController::class, 'search']);
 
                 #employees
-                Route::get('employee', [EmployeeController::class, 'index']);
                 Route::post('employee', [EmployeeController::class, 'store']);
                 Route::put('employee', [EmployeeController::class, 'update']);
                 Route::delete('employee/{id}', [EmployeeController::class, 'delete']);
