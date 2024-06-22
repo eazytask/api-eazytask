@@ -14,7 +14,11 @@ class UserProjectResource extends JsonResource
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
+        if(!empty($this->client))
+            $cname = $this->client->cname;
+        else
+            $cname = '';
+
         return [
             'id' => (int)$this->id,
             'lat' => $this->lat,
@@ -23,7 +27,7 @@ class UserProjectResource extends JsonResource
             'project_address' => $this->project_address,
             'suburb' => $this->suburb,
             'project_state' => $this->project_state,
-            'cname' => optional($this->client)->cname ?? '',
+            'cname' => $cname,
         ];
     }
 }
