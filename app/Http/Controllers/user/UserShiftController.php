@@ -121,8 +121,8 @@ class UserShiftController extends Controller
                 // ->where(function ($q) {
                 //     avoid_rejected_key($q);
                 // })
-                ->when(!empty($query_date), function($query) use ($query_date) {
-                    $query->where('roaster_date', 'LIKE', "%$query_date%");
+                ->when(!empty($query_date), function($query) use ($query_date, $curr_week) {
+                    $query->where('roaster_date', 'LIKE', "%$query_date%")->whereBetween('roaster_date', [$curr_week->startOfWeek()->toDateString(), $curr_week->endOfWeek()->toDateString()]);
                 })
                 ->when(empty($query_date), function($query) use($curr_week) {
                     $query->whereBetween('roaster_date', [$curr_week->startOfWeek()->toDateString(), $curr_week->endOfWeek()->toDateString()]);
