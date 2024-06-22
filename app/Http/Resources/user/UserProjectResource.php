@@ -23,7 +23,7 @@ class UserProjectResource extends JsonResource
             'project_address' => $this->project_address,
             'suburb' => $this->suburb,
             'project_state' => $this->project_state,
-            'cname' => $this->client->cname,
+            'cname' => optional($this->client)->cname,
         ];
     }
 }
